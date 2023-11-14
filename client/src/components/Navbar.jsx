@@ -42,8 +42,8 @@ const Navbar = () => {
                 </Link>
                 <span>Signup</span>
                 <span>Logout</span>
-                <span className="myself">
-                    <Link className = "link" to = "/myself">Myself</Link>
+                <span className="post">
+                    <Link className = "link" to = "/post">Post</Link>
                 </span>
             </div>
         </div>

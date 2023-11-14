@@ -14,7 +14,7 @@ const Register = () => {
     age : "",
   });
   const [err,setError] = useState(null);
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // this isn't working , and I don't know why yet
 
   const handleChange = e =>{
     setInputs(prev =>({...prev,[e.target.name]:e.target.value}))
