@@ -1,5 +1,5 @@
 import React from 'react'
-import img from "../img/wm.png"
+import img from "../img/products/wm.png"
 
 
 

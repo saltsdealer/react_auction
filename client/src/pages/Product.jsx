@@ -1,5 +1,5 @@
 import React from 'react'
-import temp_img from "../img/th.jpg"
+import temp_img from "../img/products/th.jpg"
 import Edit from "../img/edit.png"
 import Delete from "../img/delete.png"
 import { Link } from 'react-router-dom'

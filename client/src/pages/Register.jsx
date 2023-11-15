@@ -24,7 +24,7 @@ const Register = () => {
     e.preventDefault()
     try{
       await axios.post('http://localhost:8800/api/auth/register',inputs);
-      navigate("http://localhost:3000/Login");
+      navigate("/Login");
     } catch(err){
 
       setError(err.response.data);
