@@ -48,7 +48,8 @@ const getText = (html) =>{
               <Link className = "link" to ={`/product/${product_home.product_id}`}>
                 <h1>{product_home.pname}</h1>
               </Link>  
-              <p>{getText(product_home.description)}</p>
+              <p>{getText(product_home.description)} For {product_home.price}$</p>
+              <p> Status: {getText(product_home.status)}</p>
               <button>More Details</button>
             </div>
           </div>

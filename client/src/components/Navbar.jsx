@@ -53,7 +53,9 @@ const Navbar = () => {
                     </Link>
                 )} 
                 <span className="post">
-                    <Link className = "link" to = "/post">Post</Link>
+                    <Link className = "link" to = "/upload">
+                        Post
+                    </Link>
                 </span>
             </div>
         </div>

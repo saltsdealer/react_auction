@@ -8,7 +8,7 @@ import Login from './pages/Login.jsx';
 import Navbar from './components/Navbar.jsx';
 import Home from './pages/Home.jsx';
 import Footer from "./components/Footer.jsx";
-import Product from "./pages/Product.jsx";
+import Single from "./pages/Single.jsx";
 import Post from "./pages/Post.jsx";
 import "./style.scss"
 
@@ -33,10 +33,10 @@ const router = createBrowserRouter([
       },
       {
         path:"/product/:id",
-        element:<Product/>
+        element:<Single/>
       },
       {
-        path:"/post",
+        path:"/upload",
         element:<Post/>
       },
     ]
