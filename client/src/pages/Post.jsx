@@ -38,7 +38,7 @@ const Post = () => {
             title,
             desc: value,
             cat,
-            img: file ? imgUrl : "",
+            picture: file ? imgUrl : "",
             price,
             weight,
             address_id,
@@ -98,7 +98,7 @@ const Post = () => {
             <b>Status: </b> Draft
           </span>
           <span>
-            <b>Visibility: </b> Public
+            <b>Visibility: </b> Public 
           </span>
           <input
             style={{ display: "none" }}
@@ -111,7 +111,7 @@ const Post = () => {
             Upload Image
           </label>
           <div className="buttons">
-            <button>Save as a draft</button>
+            
             <button onClick={handleClick}>Publish</button>
           </div>
         </div>
