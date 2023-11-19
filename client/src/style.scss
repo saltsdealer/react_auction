@@ -305,108 +305,85 @@ $lightGreen : #e6f5f4;
             }
         }
 
-        // product page
-        .product {
+        // user page
+        .user_page {
             display: flex;
-            gap: 50px;
-
-            .content {
-                flex: 5;
-                display: flex;
-                flex-direction: column;
-                gap: 30px;
-
-                img {
-                    width: 100%;
-                    height: 300px;
-                    object-fit: cover;
+            justify-content: center;
+            align-items: center;
+            .content_user {
+                width: 80%;
+                margin: 20px auto;
+                padding: 15px;
+                background-color: white;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+              .user_info {
+                margin-bottom: 20px;
+                h2 {
+                  font-size: 16px;
                 }
-
-                .user {
-                    display: flex;
-                    align-items: center;
-                    gap: 10px;
-                    font-size: 14px;
-
-                    img {
-                        width: 50px;
-                        height: 50px;
-                        border-radius: 50%;
-                        object-fit: cover;
-                    }
-
-                    span {
-                        font-weight: bold;
-                    }
-
+                p1 {
+                  // Styles for the p1 elements
                 }
-
-                .edit {
-                    display: flex;
-                    gap: 5px;
-
-                    img {
-                        width: 20px;
-                        height: 20px;
-                        cursor: pointer;
+                .edit{
+                    img{
+                        width: 25px;
+                        height: 25px;
                     }
                 }
-
-                h1 {
-                    font-size: 42px;
-                    color: #333;
-                }
+                // Additional styling for user_info
+              }
           
-                  p {
-                    text-align: justify;
-                    line-height: 30px;
+              .products {
+                h1{
+                    font-size: 16px;
                 }
-            }
-
-
-            .menu {
-                flex: 2;
-                display: flex;
-                flex-direction: column;
-                gap: 25px;
-
-                h1 {
-                    font-size: 20px;
-                    color: #555;
-                }
-
-                .product_home {
+                .product_user {
                     display: flex;
-                    flex-direction: column;
-                    gap: 10px;
-
+                    align-items: center; /* Add this to vertically align items in flex container */
+                    margin-bottom: 15px;
+                    border-bottom: 1px solid #eee;
+          
+                  .img {
+                    width: 50px;
+                    height: 50px;
+                    margin-right: 15px;
                     img {
                         width: 100%;
-                        height: 200px;
+                        height: 100%;
                         object-fit: cover;
                     }
-
-                    h2 {
+                  }
+          
+                  .content {
+                    padding-left: 20px;
+          
+                    .link {
+                        text-decoration: none;
+                        color: #007bff;
+                      h1 {
+                        font-size: 12px;
+                      }
+                    }
+          
+                    p1 {
+                        margin: 5px 0;
                         color: #555;
                     }
-
-                    button {
-                        width: max-content;
-                        padding: 10px 20px;
-                        border: none;
-                        cursor: pointer;
-                        background-color: white;
-                        border: 1px solid $lightGreen;
-                        color: teal;
-
-                        &:hover {
-                            border: 1px solid white;
-                            background-color: $lightGreen;
-                        }
+                    h2 {
+                        font-size: 12px;
                     }
+                    p{
+                        font-size: 12px;
+                    }
+                  }
                 }
+              }
+          
+              // Additional styling for content_user
             }
-        }
+          
+            // Additional global styling for user_page
+          }
 
         //post
         .add {

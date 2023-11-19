@@ -50,7 +50,7 @@ const getText = (html) =>{
               </Link>  
               <p>{getText(product_home.description)} For {product_home.price}$</p>
               <p> Status: {getText(product_home.status)}</p>
-              <button>More Details</button>
+              
             </div>
           </div>
         ))}

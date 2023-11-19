@@ -11,6 +11,8 @@ import Footer from "./components/Footer.jsx";
 import Single from "./pages/Single.jsx";
 import Post from "./pages/Post.jsx";
 import "./style.scss"
+import User from "./pages/User.jsx";
+import PostUser from "./pages/PostUser.jsx";
 
 const Layout = ()=>{
   return (
@@ -38,6 +40,14 @@ const router = createBrowserRouter([
       {
         path:"/upload",
         element:<Post/>
+      },
+      {
+        path:"/user/:id",
+        element:<User/>
+      },
+      {
+        path:"/change",
+        element:<PostUser/>
       },
     ]
   },

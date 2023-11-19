@@ -28,8 +28,8 @@ export const register = async (req, res) => {
       console.log(managerData);
       // Add user with manager id
       const currentTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
-      const addUserQuery = "INSERT INTO `User` (`user_id`, `user_name`, `add_id`, `manager_id`, `create_time`, `end_time`, `address_detail`) VALUES (?, ?, ?, ?, ?, ?, ?)";
-      await queryDB(addUserQuery, [req.body.user_id, req.body.username, req.body.state, managerId, currentTime, "2037-01-19 03:13:07", req.body.address]);
+      const addUserQuery = "INSERT INTO `User` (`user_id`, `user_name`, `add_id`, `manager_id`, `age_id`, `create_time`, `end_time`, `address_detail`) VALUES (?, ?, ?, ?, GetAgeGroupId(?), ?, ?, ?)";
+      await queryDB(addUserQuery, [req.body.user_id, req.body.user_name, req.body.state, managerId, req.body.age,currentTime, "2037-01-19 03:13:07", req.body.address]);
       
       // Hash password and create user
       const salt = bcrypt.genSaltSync(10);

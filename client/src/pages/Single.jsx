@@ -39,14 +39,11 @@ const Single = () => {
     }
   }
 
-  const getText = (html) =>{
-    const doc = new DOMParser().parseFromString(html, "text/html")
-    return doc.body.textContent
-  }
+  
   console.log("user:",currentUser);
   console.log("product:",product);
   return (
-    <div className='product'>
+    <div className='single'>
       <div className="content">
         <img src={product?.picture} alt='' />
         <div className='user'>
