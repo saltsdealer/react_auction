@@ -39,7 +39,10 @@ const Single = () => {
     }
   }
 
-  
+  if (!product || !currentUser || !product.user_id || !currentUser.user_id) {
+    return <div>Login to see more...</div>; // or any other appropriate fallback content
+  }
+
   console.log("user:",currentUser);
   console.log("product:",product);
   return (
