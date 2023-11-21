@@ -10,6 +10,7 @@ import Home from './pages/Home.jsx';
 import Footer from "./components/Footer.jsx";
 import Single from "./pages/Single.jsx";
 import Post from "./pages/Post.jsx";
+import Chat from "./pages/Chat.jsx";
 import "./style.scss"
 
 const Layout = ()=>{
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path:"/upload",
         element:<Post/>
+      },
+      {
+        path:"/chat",
+        element:<Chat/>
       },
     ]
   },
