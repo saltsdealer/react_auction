@@ -69,5 +69,19 @@ export const MixedChart = (props) => {
       .catch((error) => console.error("Error fetching data: ", error));
   }, [props.category, props.year]);
 
-  return <Line data={chartData} />;
+  return (
+    <div>
+      <Line data={chartData} />
+      <div className="chartExplanation">
+        <div className="chartExplanationItem">
+          <span className="lineRepresentation"></span>
+          <strong>Total {props.category}</strong>
+        </div>
+        <div className="chartExplanationItem">
+          <span className="barRepresentation"></span>
+          <strong>New {props.category} in the month</strong>
+        </div>
+      </div>
+    </div>
+  );
 };

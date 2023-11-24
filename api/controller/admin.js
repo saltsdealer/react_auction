@@ -22,6 +22,11 @@ export const deleteUser = async (req, res) => {
     // delete in user_key table
     await dbUser
       .promise()
+      .query("DELETE FROM Session WHERE user_id = ?", [userId]);
+
+    // delete in Session table
+    await dbUser
+      .promise()
       .query("DELETE FROM user_key WHERE user_id = ?", [userId]);
 
     if (result[0].affectedRows === 0) {
