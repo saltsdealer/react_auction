@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import img from "../img/products/wm.png"
 import axios from 'axios';
+import { Link } from 'react-router-dom';
 
 
 
@@ -36,7 +37,9 @@ const Menu = ({cat}) => {
             <div className='product_home' key ={product_home.product_id}>
                 <img src={product_home.picture} alt=''/>
                 <h2>{product_home.pname}</h2>
+                <Link to = {`/product/${product_home.product_id}`}>
                 <button>Read More</button>
+                </Link>
             </div>
         ))}
     </div>

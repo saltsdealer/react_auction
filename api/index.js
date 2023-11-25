@@ -2,6 +2,7 @@ import express  from "express"
 import productRoutes from "./routes/products.js"
 import userRoutes from "./routes/users.js"
 import authRoutes from "./routes/auth.js"
+import orderRoutes from "./routes/orders.js"
 import cors from 'cors'
 import cookieParser  from "cookie-parser"
 import multer from "multer"
@@ -30,6 +31,7 @@ app.post('/api/upload',upload.single('file'),function(req,res){
 app.use("/api/auth",authRoutes)
 app.use("/api/users",userRoutes)
 app.use("/api/products",productRoutes)
+app.use("/api/orders",orderRoutes)
 
 app.get("/test",(req,res)=>{
     res.json("It works!")

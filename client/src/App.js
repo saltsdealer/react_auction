@@ -13,6 +13,8 @@ import Post from "./pages/Post.jsx";
 import "./style.scss"
 import User from "./pages/User.jsx";
 import PostUser from "./pages/PostUser.jsx";
+import Order from "./pages/Order.jsx"
+import Bidding from "./components/Bidding.jsx";
 
 const Layout = ()=>{
   return (
@@ -48,6 +50,10 @@ const router = createBrowserRouter([
       {
         path:"/change",
         element:<PostUser/>
+      },
+      {
+        path:"/order/:id",
+        element:<Order/>
       },
     ]
   },

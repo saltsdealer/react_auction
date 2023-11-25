@@ -72,8 +72,10 @@ export const getUserBought = (req, res) => {
                     o.buyer_rate,
                     pp.picture,
                     uk.email,
+                    oc.final_price,
+                    p.description,
                     CASE 
-                        WHEN p.end_time != '2037-01-19 03:13:07' THEN 'finished' 
+                        WHEN o.end_time != '2037-01-19 03:13:07' THEN 'finished' 
                         ELSE 'ongoing' 
                     END AS status
                 FROM 
@@ -117,7 +119,7 @@ export const deleteUser = async (req, res) => {
     const result = await db.query("UPDATE `user` SET `end_time` = ? WHERE user_id = ?", [currentTime, userInfo.id]);
     const result_key = await db.query("DELETE FROM user_key WHERE user_id = ?", [userInfo.id]);
 
-    if (result.affectedRows === 0 || result_key.affectedRows ===0 ) {
+    if (result.affectedRows === 0 || result_key.affectedRows === 0) {
       return res.status(403).json("You can delete only your account!");
     }
 
@@ -167,3 +169,220 @@ export const updateUser = async (req, res) => {
     res.status(500).json({ message: "Internal Server Error", error: err });
   }
 };
+
+export const getUserbyProduct = async (req, res) => {
+  const q = `SELECT user_id FROM product WHERE product_id = ?;`;
+  db.query(q, [req.params.id], (err, data) => {
+    if (err) {
+      console.error("Error fetching user ID:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+    return res.status(200).json(data[0]);
+  })
+};
+
+function constructSQLQuery(searchParams) {
+  let baseQuery = `SELECT 
+                    oc.*, o.*, s.*, p.*, bp.* -- specify needed columns explicitly
+                  FROM 
+                    order_creation oc
+                    JOIN \`order\` o ON oc.order_id = o.order_id
+                    JOIN shipping s ON oc.order_id = s.order_id
+                    JOIN payment p ON oc.order_id = p.order_id
+                    JOIN bidproduct bp ON oc.bid_session_id = bp.bid_session_id
+                  WHERE `;
+
+  let conditions;
+  if (searchParams.userType === 'buyer') {
+    conditions = 'oc.buyer_id = ?';
+  } else {
+    conditions = 'oc.seller_id = ?';
+  }
+
+  return baseQuery + conditions;
+}
+
+export const getOrderByUser = async (req, res) => {
+  const q = `SELECT user_id FROM user_key WHERE username = ?;`;
+  db.query(q, [req.body.name], (err, data) => {
+    if (err) {
+      console.error("Error fetching user products:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    }
+
+    const query = constructSQLQuery(req.body)
+    db.query(query, [data[0].user_id], (err, data1) => {
+      if (err) {
+        console.error("Error fetching user products:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      };
+      return res.status(200).json(data1);
+    });
+  });
+
+};
+
+export const getOrder = async (req, res) => {
+  const query = `SELECT 
+                    oc.*, o.*, s.*, p.*, bp.*, oco.*, prod.pname
+                  FROM 
+                    order_creation oc
+                    JOIN \`order\` o ON oc.order_id = o.order_id
+                    JOIN shipping s ON oc.order_id = s.order_id
+                    JOIN payment p ON oc.order_id = p.order_id
+                    JOIN bidproduct bp ON oc.bid_session_id = bp.bid_session_id
+                    JOIN product prod ON bp.product_id = prod.product_id
+                    JOIN order_comments oco ON oc.order_id = oco.order_id
+                  WHERE oc.order_id = ?`;
+
+  db.query(query, [req.params.id], (err, data) => {
+    if (err) {
+      console.error("Error fetching user products:", err);
+      return res.status(500).json({ error: "Internal server error" });
+    };
+
+    return res.status(200).json(data);
+  });
+
+};
+
+export const updateRates = async (req, res) => {
+  const { order_id, buyer_rate, seller_rate } = req.body;
+  let fieldsToUpdate = [];
+
+  if (buyer_rate !== undefined) {
+    fieldsToUpdate.push(`buyer_rate = '${buyer_rate}'`);
+  }
+
+  if (seller_rate !== undefined) {
+    fieldsToUpdate.push(`seller_rate = '${seller_rate}'`);
+  }
+
+  if (fieldsToUpdate.length === 0) {
+    return res.status(400).send('No rates provided to update.');
+  }
+
+  const q = `UPDATE \`order\` SET ${fieldsToUpdate.join(', ')} WHERE order_id = '${order_id}'`;
+  console.log(q)
+  try {
+    // Assuming you have a database connection set up and using a library that supports .query()
+    const result = await db.query(q);
+    return res.status(200).send('Rates updated successfully.');
+  } catch (error) {
+    console.error('Rates to update comments:', error);
+    return res.status(500).send('Error updating rates.');
+  }
+};
+
+export const updateStatus = async (req, res) => {
+  if (req.body.actionType === 'ship') {
+    // Update the shipping table
+    const q = "UPDATE shipping SET ship_status = 1 where order_id = ?"
+    db.query(q, [req.body.order_id], (err, data) => {
+      if (err) {
+        console.error("Error updating shipping status:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      };
+
+      return res.status(200)
+    });
+  } else if (req.body.actionType === 'pay') {
+    // Update the payment table
+    const q = "UPDATE payment SET pay_status = 1 where order_id = ?"
+    db.query(q, [req.body.order_id], (err, data) => {
+      if (err) {
+        console.error("Error updating payment status:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      };
+
+      return res.status(200)
+    });
+  }
+
+};
+
+export const updateComments = async (req, res) => {
+  if (req.body.role === 'buyer') {
+    // Update the shipping table
+    const q = "UPDATE order_comments SET buyer_comment = ? where order_id = ?"
+    db.query(q, [req.body.comment, req.body.order_id], (err, data) => {
+      if (err) {
+        console.error("Error updating buyer comments:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      };
+
+      return res.status(200)
+    });
+  } else if (req.body.role === 'seller') {
+    // Update the payment table
+    const q = "UPDATE order_comments SET seller_comment = ? where order_id = ?"
+    db.query(q, [req.body.comment, req.body.order_id], (err, data) => {
+      if (err) {
+        console.error("Error updating seller comments:", err);
+        return res.status(500).json({ error: "Internal server error" });
+      };
+
+      return res.status(200)
+    });
+  }
+
+};
+
+export const getAverageRates = async (req, res) => {
+  const rates = `SELECT AVG(
+                  CASE 
+                    WHEN o.buyer_rate <> -1 THEN o.buyer_rate
+                    ELSE NULL
+                  END
+                ) AS average_value
+              FROM order_creation oc
+              JOIN \`order\` o ON o.order_id = oc.order_id
+              JOIN user_key uk ON oc.seller_id = uk.user_id
+              WHERE uk.username = ?;`
+
+  try {
+
+    await db.query(rates, [req.params.id], (err, data) => {
+      if (err) {
+        return res.status(500).json({ error: "Internal server error" });
+      };
+  
+      return res.status(200).json(data[0])
+
+    });
+
+
+
+  } catch (error) {
+    console.error('Database query error:', error);
+    res.status(500).send('Error fetching data');
+  }
+};
+
+export const getReviews = async (req, res) => {
+
+  const reviews = `SELECT oco.buyer_comment
+                    FROM order_creation oc 
+                    JOIN order_comments oco ON oc.order_id = oco.order_id
+                    JOIN user_key uk ON oc.seller_id = uk.user_id
+                    WHERE uk.username = ?
+                    LIMIT 2`;
+  try {
+
+    await db.query(reviews, [req.params.id], (err, data) => {
+      if (err) {
+        return res.status(500).json({ error: "Internal server error" });
+      };
+ 
+      return res.status(200).json(data)
+
+    });
+
+
+
+  } catch (error) {
+    console.error('Database query error:', error);
+    res.status(500).send('Error fetching data');
+  }
+
+}

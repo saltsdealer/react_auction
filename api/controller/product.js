@@ -24,7 +24,7 @@ export const getProducts = (req,res) =>{
     `;
 
     const q = req.query.cat 
-    ? `${baseQuery} WHERE p.prod_id = ?;`
+    ? `${baseQuery} WHERE p.prod_id = ? AND p.end_time != '1999-09-09 09:09:09';`
     : `${baseQuery} WHERE p.end_time = '2037-01-19 03:13:07';`;
 
     db.query(q,[req.query.cat],(err,data)=>{
@@ -53,11 +53,15 @@ export const getProduct = (req,res) =>{
                     picture, 
                     p.prod_id, 
                     p.create_time,
-                    p.user_id
+                    p.user_id,
+                    uk.username,
+                    p.product_id,
+                    p.price
                 FROM USER u 
                 JOIN product p 
                 ON u.user_id = p.user_id 
                 JOIN prod_pic pp ON p.product_id = pp.prod_id
+                JOIN user_key uk on u.user_id = uk.user_id
                 WHERE p.product_id = ?;
                 `;
     db.query(q,[req.params.id],(err,data)=>{
@@ -68,6 +72,68 @@ export const getProduct = (req,res) =>{
     });
 };
 
+function constructSQLQuery(searchParams) {
+  let baseQuery = 'SELECT * FROM product p JOIN prod_pic pp ON p.product_id = pp.prod_id WHERE ';
+  let conditions = [];
+  let params = [];
+  
+  console.log("1");
+  if (searchParams.pname) {
+    conditions.push("pname LIKE ?");
+    params.push('%' + searchParams.pname + '%');
+}
+  console.log(conditions);
+  if (searchParams.category) {
+    conditions.push('category = ?');
+    params.push(searchParams.category);
+  }
+  if (searchParams.stateUploaded) {
+    conditions.push('stateUploaded = ?');
+    params.push(searchParams.stateUploaded);
+  }
+  if (searchParams.lowerPrice) {
+    conditions.push('price >= ?');
+    params.push(searchParams.lowerPrice);
+  }
+  if (searchParams.upperPrice) {
+    conditions.push('price <= ?');
+    params.push(searchParams.upperPrice);
+  }
+
+  // Join conditions with 'AND'
+  let query = conditions.length ? baseQuery + conditions.join(' AND ') : "";
+  return { query, params };
+}
+
+export const getProductVaguely = async (req,res) => {
+  try {
+    console.log(req.body);
+    const { query, params } = constructSQLQuery(req.body);
+    if (!query) return res.status(500).json("No search implemented");
+    console.log("Q:",query);
+    console.log("P:",params);
+    // Perform the database query with the constructed SQL
+    try {
+      const { query, params } = constructSQLQuery(req.body);
+  
+      db.query(query, params, async (err, products) => {
+        if (err) {
+          console.error('Error occurred: ', err);
+          return res.status(500).send('An error occurred');
+        }
+  
+        //console.log('Products: ', products, 'Type:', typeof products);
+        return res.status(200).json(products);
+      });
+    } catch (error) {
+      console.error('Error occurred: ', error);
+      res.status(500).send('Server error');
+    }
+    
+  } catch (error) {
+    throw new Error('Error during search operation');
+  }
+};
 
 export const addProduct = async (req, res) => {
   try {
@@ -115,27 +181,7 @@ export const addProduct = async (req, res) => {
   }
 };
 
-// export const deleteProduct = (req,res) =>{
-//   const token = req.cookies.access_token;
-//   if (!token) return res.status(401).json("Not authenticated!");
 
-//   jwt.verify(token, "jwtkey", (err, userInfo) => {
-//     if (err) return res.status(403).json("Token is not valid!");
-
-//     const currentTime = new Date().toISOString().slice(0, 19).replace('T', ' ');
-//     const postId = req.params.id;
-//     const q = "UPDATE product SET end_time = ? WHERE `product_id` = ? AND `user_id` = ?";
-//     const q_pic = "DELETE FROM prod_pic WHERE prod_id = ?;";
-
-//     db.query(q_pic, [postId]);
-
-//     db.query(q, [currentTime, postId, userInfo.id], (err, data) => {
-//       if (err) return res.status(403).json("You can delete only your post!");
-
-//       return res.json("Product has been deleted!");
-//     });
-//   });
-// };
 
 export const deleteProduct = async (req, res) => {
   try {
@@ -163,8 +209,8 @@ export const deleteProduct = async (req, res) => {
     await db.query("DELETE FROM prod_pic WHERE prod_id = ?", [postId]);
 
     // Update product table
-    const result = await db.query("DELETE FROM product WHERE `product_id` = ? AND `user_id` = ?", [postId, userInfo.id]);
-
+    // const result = await db.query("DELETE FROM product WHERE `product_id` = ? AND `user_id` = ?", [postId, userInfo.id]);
+    const result = await db.query("UPDATE product SET `end_time` = '1999-09-09 09:09:09' WHERE `product_id` = ? AND `user_id` = ?", [postId, userInfo.id]);
     if (result.affectedRows === 0) {
       return res.status(403).json("You can delete only your post!");
     }
