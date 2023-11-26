@@ -39,14 +39,14 @@ const Single = () => {
     }
   }
 
-  const getText = (html) =>{
-    const doc = new DOMParser().parseFromString(html, "text/html")
-    return doc.body.textContent
+  if (!product || !currentUser || !product.user_id || !currentUser.user_id) {
+    return <div>Login to see more...</div>; // or any other appropriate fallback content
   }
+
   console.log("user:",currentUser);
   console.log("product:",product);
   return (
-    <div className='product'>
+    <div className='single'>
       <div className="content">
         <img src={product?.picture} alt='' />
         <div className='user'>

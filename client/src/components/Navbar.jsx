@@ -1,20 +1,11 @@
 import React, { useContext } from 'react'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import Logo from '../img/logo.png'
 import { AuthContext } from '../context/authContext.js'
 
 const Navbar = () => {
     const {currentUser,logout} = useContext(AuthContext);
-    // const navigate = useNavigate()
-
-    // // chatbot function is visible to all users, but only logged-in users can access it due to extra cost.
-    // const handleChatClick = () => {
-    //     if (currentUser) {
-    //         navigate('/chat')
-    //     }else {
-    //         navigate('/login')
-    //     }
-    // }
+    
   return (
     <div className='navbar'>
         <div className="container">
@@ -53,16 +44,14 @@ const Navbar = () => {
                 </Link>
                 <Link className='link' to= "/?cat=jwl">
                     <h6>Jewelry</h6>
-                </Link>
-                {/* <span className='link' onClick={handleChatClick}>
-                    Chat Bot
-                </span> */}
-                <Link className='link' to='/chat'>
-                    Chat Bot
-                </Link>
-                <span>{currentUser?.username}</span>
+                </Link> 
                 {currentUser ? (
-                    <span onClick={logout}>Logout</span>
+                   <>
+                   <Link to={`/user/${currentUser.username}`} className="link">
+                   {currentUser.username}
+                   </Link>
+                   <span onClick={logout}>Logout</span>
+                    </>
                 ) : (
                     <Link className="link" to="/login">
                         Login

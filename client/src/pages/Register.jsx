@@ -8,6 +8,7 @@ const Register = () => {
     user_id : "",
     password : "",
     username : "",
+    user_name : "",
     email : "",
     address : "",
     state : "",
@@ -40,7 +41,8 @@ const Register = () => {
         <form>
             <input required type = "user_id" placeholder='nuid' name ='user_id' onChange={handleChange}/>
             <input required type = "password" placeholder='password' name ='password' onChange={handleChange}/>
-            <input required type = "text" placeholder='username' name ='username' onChange={handleChange}/> 
+            <input required type = "username" placeholder='username' name ='username' onChange={handleChange}/> 
+            <input required type = "user_name" placeholder='your name' name ='user_name' onChange={handleChange}/> 
             <input required type = "email" placeholder='email' name ='email' onChange={handleChange}/>
             <input required type = "address" placeholder='address' name ='address' onChange={handleChange}/>
             <input required type = "state" placeholder='state' name ='state' onChange={handleChange}/>

@@ -1,41 +1,46 @@
-import React, { useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../context/authContext';
 import DynamicTable from '../components/DynamicTable'
 
 const Chat = () => {
-    console.log('enter chat frontend')
+    const { currentUser } = useContext(AuthContext);
+    const navigate = useNavigate()
+
     const [query, setQuery ] = useState('')
     const [results, setResults ] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
     const [error, setError] = useState(null)
 
+    useEffect(() => {
+        if (!currentUser) {
+            navigate("/login")
+        }
+    }, [currentUser, navigate])
+
     const handleQuerySubmit = async (event) => {
-        console.log('enter handlequerysubmit')
         event.preventDefault()
         setIsLoading(true)
         setError(null)
        
         try {
-            console.log('enter generate sql query')
-            //const query = "Generate an SQL query to select all columns from the 'User' table"
             const response = await fetch('http://localhost:8800/api/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ query }),
-                //body: {"query":"Generate an SQL query to select all columns from the 'User' table"},
+                body: JSON.stringify({ 
+                    query,
+                    user_id: currentUser.user_id
+                }),
             })
 
-            //console.log(response.headers.get("content-type"), await response.text());
-            console.log('finish generate sql query')
             if (!response.ok) {
                 throw new Error(`Error: ${response.statusText}`)
             }
-            console.log('fail generate sql query')
 
             const data = await response.json()
             setResults(data)
-            console.log('success generate sql query')
         } catch(err) {
             setError(err.message);
         } finally {
@@ -44,7 +49,7 @@ const Chat = () => {
     }
 
     return (
-        <div className="query">
+        <div className="query"> 
             <form onSubmit={handleQuerySubmit}>
                 <div className='input-wrapper'>
                     <textarea
@@ -59,17 +64,15 @@ const Chat = () => {
                     {isLoading ? 'Loading...' : 'Submit'}
                 </button>
             </form>
-            {error && <div>Error: {error}</div>}
-            <div>
-                <DynamicTable data={results} />
-            </div>
-            {/* {results && (
+            {error ? 
+                (
+                <div>Error: {error}</div>
+                ) : (
                 <div>
-                    <h2>Results:</h2>
-                    <pre>{JSON.stringify(results, null, 2)}</pre>
+                    <DynamicTable data={results} />
                 </div>
-            )} */}
-            
+                )
+            }
         </div>
     )
 }
