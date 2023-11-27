@@ -151,7 +151,7 @@ const User = () => {
               <p>
                 Created {userDetails?.create_time ? moment(userDetails.create_time).fromNow() : ''} <br />
               </p>
-              <p>
+              <div>
                 {currentUser?.user_id === userDetails?.user_id ? (
                   <>
                     Address: {userDetails?.address_detail}<br />
@@ -164,7 +164,7 @@ const User = () => {
                 ) : (
                   <>State: {userDetails?.add_id}</>
                 )}
-              </p>
+              </div>
             </div>
             <div className='products'>
               <h1>Uploaded</h1>

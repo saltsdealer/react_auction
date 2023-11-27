@@ -589,5 +589,33 @@ $lightGreen : #e6f5f4;
 
             }
         }
+
+        //admin statistics
+        .chartExplanation {
+            display: flex;
+            flex-direction: column;
+            margin-left: 20px;
+            align-items: center;
+
+            .chartExplanationItem {
+                display: flex;
+                align-items: center;
+                margin-bottom: 10px;
+
+                .lineRepresentation {
+                border: 2px solid rgb(54, 162, 235);
+                width: 30px;
+                margin-right: 8px;
+                }
+            
+                .barRepresentation {
+                    background-color: rgba(255, 99, 132, 0.5);
+                    width: 20px;
+                    height: 10px;
+                    margin-right: 8px;
+                }
+            }
+        }
+        
     }
 }

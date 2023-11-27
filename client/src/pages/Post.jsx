@@ -1,9 +1,10 @@
 import axios from 'axios';
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // this is text editor
 import { useLocation, useNavigate } from 'react-router-dom';
 import moment from "moment";
+import { AuthContext } from '../context/authContext';
 
 const Post = () => {
   const state = useLocation().state;
@@ -14,8 +15,11 @@ const Post = () => {
   const [address_id, setSCode] = useState();
   const [file, setFile] = useState(null);
   const [cat, setCat] = useState(state?.cat || "");
+  const { currentUser } = useContext(AuthContext);
 
   const navigate = useNavigate()
+  const allFieldsFilled = value && title && price && weight && address_id && file && cat;
+  if (!currentUser) return <div>login to post items</div>;
 
   const upload = async () => {
     try {
@@ -35,25 +39,25 @@ const Post = () => {
     try {
       state
         ? await axios.put(`http://localhost:8800/api/products/${state.id}`, {
-            title,
-            desc: value,
-            cat,
-            picture: file ? imgUrl : "",
-            price,
-            weight,
-            address_id,
-          })
+          title,
+          desc: value,
+          cat,
+          picture: file ? imgUrl : "",
+          price,
+          weight,
+          address_id,
+        })
         : await axios.post(`http://localhost:8800/api/products/`, {
-            title,
-            desc: value,
-            cat,
-            picture: file ? imgUrl : "",
-            create_time: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
-            price,
-            weight,
-            address_id,
-          });
-          navigate("/")
+          title,
+          desc: value,
+          cat,
+          picture: file ? imgUrl : "",
+          create_time: moment(Date.now()).format("YYYY-MM-DD HH:mm:ss"),
+          price,
+          weight,
+          address_id,
+        });
+      navigate("/")
     } catch (err) {
       console.log(err);
     }
@@ -73,7 +77,7 @@ const Post = () => {
           onChange={(e) => setPrice(e.target.value)}
         />
         <input
-          type="number" 
+          type="number"
           placeholder="Weight"
           onChange={(e) => setWeight(e.target.value)}
         />
@@ -98,7 +102,7 @@ const Post = () => {
             <b>Status: </b> Draft
           </span>
           <span>
-            <b>Visibility: </b> Public 
+            <b>Visibility: </b> Public
           </span>
           <input
             style={{ display: "none" }}
@@ -111,8 +115,10 @@ const Post = () => {
             Upload Image
           </label>
           <div className="buttons">
-            
-            <button onClick={handleClick}>Publish</button>
+
+            {allFieldsFilled && (
+              <button onClick={handleClick}>Publish</button>
+            )}
           </div>
         </div>
         <div className="item">

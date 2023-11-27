@@ -170,7 +170,6 @@ export const addProduct = async (req, res) => {
     await db.query(`INSERT INTO product (product_id, user_id, price, weight, 
       create_time, end_time, description, prod_id, address_id, pname) VALUES (?)`, 
       [values_product]);
-
     return res.json("Product has been created.");
   } catch (err) {
     if (err instanceof jwt.JsonWebTokenError) {
@@ -180,7 +179,6 @@ export const addProduct = async (req, res) => {
     }
   }
 };
-
 
 
 export const deleteProduct = async (req, res) => {
