@@ -6,7 +6,7 @@ import Home from "./pages/Home.jsx";
 import Footer from "./components/Footer.jsx";
 import Single from "./pages/Single.jsx";
 import Post from "./pages/Post.jsx";
-import "./style.scss";
+import Chat from "./pages/Chat.jsx";
 import User from "./pages/User.jsx";
 import PostUser from "./pages/PostUser.jsx";
 import AdminLogin from "./pages/AdminLogin.jsx";
@@ -14,6 +14,7 @@ import AdminNavbar from "./components/AdminNavbar.jsx";
 import DeleteUser from "./pages/DeleteUser.jsx";
 import DeleteProduct from "./pages/DeleteProduct.jsx";
 import Statistics from "./pages/Statistics.jsx";
+import "./style.scss";
 
 const Layout = () => {
   return (
@@ -60,7 +61,11 @@ const router = createBrowserRouter([
         path: "/change",
         element: <PostUser />,
       },
-    ],
+      {
+        path:"/chat",
+        element:<Chat/>
+      },
+    ]
   },
   {
     path: "/register",

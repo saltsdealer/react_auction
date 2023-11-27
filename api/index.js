@@ -4,6 +4,7 @@ import userRoutes from "./routes/users.js";
 import authRoutes from "./routes/auth.js";
 import adminAuthRoutes from "./routes/adminAuth.js";
 import adminRoutes from "./routes/admin.js";
+import chatRoute from "./routes/chat.js"
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import multer from "multer";
@@ -29,11 +30,10 @@ app.post("/api/upload", upload.single("file"), function (req, res) {
   res.status(200).json(file.filename);
 });
 
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/products", productRoutes);
-app.use("/api/auth/admin", adminAuthRoutes);
-app.use("/api/admin", adminRoutes);
+app.use("/api/auth",authRoutes)
+app.use("/api/users",userRoutes)
+app.use("/api/products",productRoutes)
+app.use('/api/chat', chatRoute)
 
 app.get("/test", (req, res) => {
   res.json("It works!");
