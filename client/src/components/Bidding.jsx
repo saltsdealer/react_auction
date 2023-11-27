@@ -77,7 +77,7 @@ const Bidding = ({ product_id, indicator, user_id, start_price, puser, time, onB
         console.log("No bids available");
         return;
       }
-  
+      
       // First GET request to check if order exists
       const res = await axios.get(`http://localhost:8800/api/orders/order/${product_id}`);
       console.log('Order status:', res.data.order_status);
@@ -113,12 +113,9 @@ const Bidding = ({ product_id, indicator, user_id, start_price, puser, time, onB
   useEffect(() => {
     // Check and call createOrder only when product_id changes
     if (indicator === "Sold") {
-      checkOrder(bids).catch(error => {
-        // Handle the error scenario
-        console.error('Failed to create order:', error);
-      });
+      checkOrder(bids)
     }
-  }, [product_id, checkOrder]); 
+  }, [indicator, checkOrder]); 
 
   return (
     <div style={{ padding: '20px', backgroundColor: '#e6f5f4', borderRadius: '10px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)' }} className="bids-table">

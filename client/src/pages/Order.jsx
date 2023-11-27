@@ -14,12 +14,7 @@ const Order = () => {
   const [ratings, setRatings] = useState({});
 
 
-  const truncateID = (id) => {
-    if (id && id.length > 2) {
-      return `${id.substring(0, 2)}***`; // Replace with asterisks
-    }
-    return id;
-  };
+  
 
   const handleRatingChange = (orderId, role, newRating) => {
     const ratingKey = `${orderId}_${role}`;
@@ -50,6 +45,7 @@ const Order = () => {
       const response = await axios.post(`http://localhost:8800/api/users/rates`, data);
       console.log(response.data); // Handle the response as needed
       alert('Rating published successfully.');
+      window.location.reload();
 
       // Optionally, clear the input field after successful publishing
       setRatings(prevRatings => ({
@@ -126,9 +122,14 @@ const Order = () => {
       try {
         console.log("res");
         const res = await axios.get(`http://localhost:8800/api/users/order/${order_id}`);
-
+        const end_time = await axios.get(`http://localhost:8800/api/orders/order-end-time/${order_id}`);
         setOrder(res.data);
-
+        if (orders[0].buyer_comment !== null && orders[0].buyer_rate !== -1 && orders[0].seller_comment !== null 
+          && orders[0].seller_rate !== -1 && end_time.end_time === '2037-01-19 03:13:07') {
+          await axios.post(`http://localhost:8800/api/orders/complete`, {order_id : order_id})
+          
+          console.log("order end time updated")
+        }
 
       } catch (err) {
         console.error(err);

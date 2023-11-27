@@ -20,7 +20,7 @@ const [upperPrice, setUpperPrice] = useState('');
 
 const [searched, setSearched] = useState('');
 
-
+const [status, setStatus] = useState([]);
 
 const handleSearch = async (event) => {
   const searchParams = {
@@ -54,6 +54,24 @@ useEffect(()=>{
 },[cat]);
 
 useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const response = await axios.post('http://localhost:8800/api/products/bidding');
+      if (response && response.data) {
+        console.log("status", response.data);
+        setStatus(response.data);
+      } else {
+        console.log("No data received", response);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+  
+  fetchData()
+}, []);
+
+useEffect(() => {
   // If `searched` has a value, set `product_homes` to that value
   if (searched) {
       setProduct_homes(searched); // Assuming you want to set product_homes as an array with `searched` as its only element
@@ -66,7 +84,46 @@ const getText = (html) =>{
   return doc.body.textContent
 }
 
-console.log("pd", product_homes);
+
+if (!product_homes && !status) {
+  
+  return <div>Loading data ... </div>
+  
+}
+
+const addEndTimeToProducts = (products, statuses) => {
+  return products.map(product => {
+    // Find the matching status object based on product_id
+    const statusObj = statuses.find(status => status.product_id === product.product_id);
+
+    // Add end_time to the product object, use null if not found
+    return { ...product, end_time: statusObj ? statusObj.end_time : null };
+  });
+};
+
+const checkBiddingStatus = (products, productId) => {
+  // Find the product with the given product_id
+  const product = products.find(product => product.product_id === productId);
+
+  // Check if the product is found and the end_time is set
+  if (product && product.end_time) {
+    const endTime = new Date(product.end_time);
+    const specialTime = new Date('2037-01-19T03:13:07Z');
+    const now = new Date();
+
+    // Check if end_time is later than now and not equal to specialTime
+    if (endTime > now && endTime.getTime() !== specialTime.getTime()) {
+      return 'bidding';
+    }
+  }
+
+  return null;
+};
+
+// Usage
+const updatedProducts = addEndTimeToProducts(product_homes, status);
+
+
 
   return (
     <div className='home'>
@@ -130,7 +187,7 @@ console.log("pd", product_homes);
                 <h1>{product_home.pname}</h1>
               </Link>  
               <p>{getText(product_home.description)} For {product_home.price}$</p>
-              <p> Status: {getText(product_home.status)}</p>
+              <p> {checkBiddingStatus(updatedProducts, product_home.product_id) ? 'bidding, hurry!' : product_home.status}</p>
               
             </div>
           </div>

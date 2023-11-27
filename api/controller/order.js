@@ -256,6 +256,17 @@ export const deletePrvious = async (req, res) => {
     
 }
 
+export const updateOrderEndTime = async (req, res) => {
+    const currentTime = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
+    const q = 'UPDATE `order` SET end_time = ? WHERE order_id =?';
+    db.query(q, [currentTime, req.body.order_id], (err, data) => {
+        if (err) {
+            console.error("Error in completing order:", err);
+            return res.status(500).json({ error: "Internal Server Error" });
+        }
+    });
+}
+
 export const updatePendtime = async (req, res) => {
     const currentTime = moment(new Date()).format("YYYY-MM-DD HH:mm:ss");
     const q = 'UPDATE product SET end_time = ? WHERE product_id =?';
@@ -265,4 +276,17 @@ export const updatePendtime = async (req, res) => {
             return res.status(500).json({ error: "Internal Server Error" });
         }
     })
+}
+
+export const getOrderEndTime = async (req, res) => {
+    const q = 'SELECT * FROM `order` WHERE order_id = ?'
+
+    db.query(q, [req.params.id], (err, data) => {
+        if (err) {
+            console.error("Error in completing order:", err);
+            return res.status(500).json({ error: "Internal Server Error" });
+        }
+        return res.status(200).json(data[0])
+    
+    });
 }

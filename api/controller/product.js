@@ -1,4 +1,4 @@
-import {db} from "../db.js"
+import {db, dbUser} from "../db.js"
 import jwt from "jsonwebtoken";
 import moment from "moment";
 
@@ -6,22 +6,26 @@ export const getProducts = (req,res) =>{
     
     const baseQuery = `
     SELECT 
-        p.pname,
-        p.product_id, 
-        p.user_id,
-        p.price,
-        p.description,
-        p.prod_id,
-        pp.picture, 
-        CASE 
-            WHEN p.end_time != '2037-01-19 03:13:07' THEN 'sold' 
-            ELSE 'unsold' 
-        END AS \`status\`
-    FROM 
-        Product p 
-    JOIN 
-        prod_pic pp ON p.product_id = pp.prod_id
-    `;
+          p.pname,
+          p.product_id, 
+          p.user_id,
+          p.price,
+          p.description,
+          p.prod_id,
+          pp.picture, 
+          CASE 
+              WHEN p.end_time != '2037-01-19 03:13:07' THEN 'sold'
+              ELSE 'unsold' 
+          END AS \`status\`
+      FROM 
+          Product p 
+      LEFT JOIN 
+          prod_pic pp ON p.product_id = pp.prod_id
+      LEFT JOIN 
+          bidproduct bp ON p.product_id = bp.product_id
+      LEFT JOIN 
+          bidsession bs ON bp.bid_session_id = bs.bid_session_id
+        `;
 
     const q = req.query.cat 
     ? `${baseQuery} WHERE p.prod_id = ? AND p.end_time != '1999-09-09 09:09:09';`
@@ -29,15 +33,7 @@ export const getProducts = (req,res) =>{
 
     db.query(q,[req.query.cat],(err,data)=>{
         if(err) return res.send(err);
-        //console.log(data[0]);
-        // RowDataPacket {
-        //     product_id: 'prod202310270900002000',
-        //     user_id: '123456789',
-        //     price: 9.99,
-        //     description: 'Latest iPhone',
-        //     prod_id: 'ELC',
-        //     picture: 'https://i.postimg.cc/SJvyCMGN/aj.png'
-        //   }
+        
         return res.status(200).json(data);
     });
 
@@ -241,4 +237,32 @@ const token = req.cookies.access_token;
       return res.json("Product has been updated.");
     });
   });
+};
+
+export const biddingStatus = (req,res) =>{
+  const q = `
+  SELECT 
+      p.product_id,bs.end_time
+    FROM 
+      Product p 
+    LEFT JOIN 
+      prod_pic pp ON p.product_id = pp.prod_id
+    LEFT JOIN 
+      bidproduct bp ON p.product_id = bp.product_id
+    LEFT JOIN 
+      bidsession bs ON bp.bid_session_id = bs.bid_session_id;`;
+
+      dbUser.query(q, [], (err, data) => {
+        if (err) {
+          console.error("Database error:", err);
+          return res.status(500).json({ error: "Internal Server Error" });
+        }
+        if (data.length === 0) {
+          console.log("Query returned no data");
+          return res.status(404).json({ message: "No data found" });
+        }
+        
+        return res.status(200).json(data);
+      });
+
 };
