@@ -32,7 +32,7 @@ const handleSearch = async (event) => {
   };
   console.log(searchParams);
   try {
-    const res = await axios.post(`http://localhost:8800/api/products/search`, searchParams);
+    const res = await axios.post(`http://34.125.1.254:8800/api/products/search`, searchParams);
     setSearched(res.data);
     console.log("res:", res.data);
   } catch (error) {
@@ -44,7 +44,7 @@ const handleSearch = async (event) => {
 useEffect(()=>{
   const fetchData = async ()=>{
     try {
-      const res = await axios.get(`http://localhost:8800/api/products${cat}`);
+      const res = await axios.get(`http://34.125.1.254:8800/api/products${cat}`);
       setProduct_homes(res.data);
     } catch(err){
       console.log(err);
@@ -56,7 +56,7 @@ useEffect(()=>{
 useEffect(() => {
   const fetchData = async () => {
     try {
-      const response = await axios.post('http://localhost:8800/api/products/bidding');
+      const response = await axios.post('http://34.125.1.254:8800/api/products/bidding');
       if (response && response.data) {
         console.log("status", response.data);
         setStatus(response.data);

@@ -13,6 +13,7 @@ const Footer = () => {
       return '/chat'; // Default link to the regular chatbot
     }
   };
+  console.log(getChatbotLink);
   return (
     <footer>
         <img src = {Logo} alt = ""/>
@@ -21,7 +22,7 @@ const Footer = () => {
         </Link>
        
         
-        <Link className='link' to= {getChatbotLink}>
+        <Link className='link' to= {getChatbotLink()}>
           <b>Chatbot</b>
         </Link>
         <span>Made with <b>React.js</b></span>

@@ -25,7 +25,7 @@ const Post = () => {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await axios.post("http://localhost:8800/api/upload", formData);
+      const res = await axios.post("http://34.125.1.254:8800/api/upload", formData);
       return res.data;
     } catch (err) {
       console.log(err);
@@ -38,7 +38,7 @@ const Post = () => {
 
     try {
       state
-        ? await axios.put(`http://localhost:8800/api/products/${state.id}`, {
+        ? await axios.put(`http://34.125.1.254:8800/api/products/${state.id}`, {
           title,
           desc: value,
           cat,
@@ -47,7 +47,7 @@ const Post = () => {
           weight,
           address_id,
         })
-        : await axios.post(`http://localhost:8800/api/products/`, {
+        : await axios.post(`http://34.125.1.254:8800/api/products/`, {
           title,
           desc: value,
           cat,

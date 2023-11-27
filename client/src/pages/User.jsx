@@ -52,7 +52,7 @@ const User = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:8800/api/users/${username}`);
+        const res = await axios.get(`http://34.125.1.254:8800/api/users/${username}`);
         setUser(res.data);
       } catch (err) {
         console.error(err);
@@ -66,7 +66,7 @@ const User = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`http://localhost:8800/api/users/product/${username}`);
+        const res = await axios.get(`http://34.125.1.254:8800/api/users/product/${username}`);
         setBuy(res.data);
       } catch (err) {
         console.error(err);
@@ -80,8 +80,8 @@ const User = () => {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const buy_order = await axios.post(`http://localhost:8800/api/users/orderByUser/`, { name: username, userType: 'buyer' });
-        const sell_order = await axios.post(`http://localhost:8800/api/users/orderByUser/`, { name: username, userType: 'seller' });
+        const buy_order = await axios.post(`http://34.125.1.254:8800/api/users/orderByUser/`, { name: username, userType: 'buyer' });
+        const sell_order = await axios.post(`http://34.125.1.254:8800/api/users/orderByUser/`, { name: username, userType: 'seller' });
         setbuyOrder(buy_order.data);
         setSellOrder(sell_order.data);
       } catch (err) {
@@ -99,9 +99,9 @@ const User = () => {
   useEffect(() => {
     const fetchAverageRates = async () => {
       try {
-        const response = await axios.get(`http://localhost:8800/api/users/rate/${username}`); // Adjust the URL as needed
+        const response = await axios.get(`http://34.125.1.254:8800/api/users/rate/${username}`); // Adjust the URL as needed
         setAverageRate(response.data.average_value);
-        const reviews = await axios.get(`http://localhost:8800/api/users/reviews/${username}`);
+        const reviews = await axios.get(`http://34.125.1.254:8800/api/users/reviews/${username}`);
         setLatestReviews(reviews.data)
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -113,16 +113,16 @@ const User = () => {
   }, [username]);
 
 
-  console.log("reviews:", latestReviews)
+
   if (!userDetails || !userProducts || !buy) {
     return <div>Loading...or have you logged in yet?</div>; // or any other loading indicator
   }
 
-
+  console.log("buy",buy)
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://localhost:8800/api/users/${userDetails.user_id}`);
+      await axios.delete(`http://34.125.1.254:8800/api/users/${userDetails.user_id}`);
       navigate("/");
     } catch (err) {
       console.log(err);

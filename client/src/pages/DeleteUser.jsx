@@ -25,7 +25,7 @@ const DeleteUser = () => {
 
   const handleClick = async (e) => {
     try {
-      await axios.delete(`http://localhost:8800/api/admin/user`, {
+      await axios.delete(`http://34.125.1.254:8800/api/admin/user`, {
         data: inputs,
       });
       setReturnMedssage("Successfully deleted!");

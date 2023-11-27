@@ -20,8 +20,8 @@ const Menu = ({cat}) => {
   useEffect(()=>{
     const fetchData = async ()=>{
     try {
-      const res = await axios.get(`http://localhost:8800/api/products/?cat=${cat}`);
-      setProduct_homes(res.data);
+      const res = await axios.get(`http://34.125.1.254:8800/api/products/?cat=${cat}`);
+      
       console.log(res.data);
     } catch(err){
       console.log(err);

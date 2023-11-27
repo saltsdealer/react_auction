@@ -3,7 +3,7 @@ import mysql2 from "mysql2"
 
 
 export const db = mysql.createConnection({
-  host: "34.125.1.254",
+  host: "127.0.0.1",
   user: "root",
   password: "some_pass",
   database: "test_env",
@@ -11,7 +11,7 @@ export const db = mysql.createConnection({
 });
 
 export const dbChat = mysql2.createConnection({
-  host: "34.125.1.254",
+  host: "127.0.0.1",
   user: "root",
   password: "some_pass",
   database: "test_env",
@@ -39,7 +39,7 @@ export const dbChat = mysql2.createConnection({
 // })
 
 export const dbUser = mysql2.createConnection({
-  host: "34.125.1.254",
+  host: "127.0.0.1",
   user: "root",
   password: "some_pass",
   database: "test_env",
