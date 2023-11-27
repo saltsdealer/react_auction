@@ -5,6 +5,7 @@ import { AuthContext } from '../context/authContext.js'
 
 const Navbar = () => {
     const {currentUser,logout} = useContext(AuthContext);
+    
   return (
     <div className='navbar'>
         <div className="container">
@@ -43,12 +44,12 @@ const Navbar = () => {
                 </Link>
                 <Link className='link' to= "/?cat=jwl">
                     <h6>Jewelry</h6>
-                </Link>
-               
+                </Link> 
                 {currentUser ? (
                    <>
                    <Link to={`/user/${currentUser.username}`} className="link">
-                   {currentUser.username}
+                   {currentUser.username ? currentUser.username : currentUser.admin_id}
+                   {currentUser.admin_id ? alert("admin shouldn't use user sites, logout at once") : null}
                    </Link>
                    <span onClick={logout}>Logout</span>
                     </>
@@ -56,7 +57,7 @@ const Navbar = () => {
                     <Link className="link" to="/login">
                         Login
                     </Link>
-                )} 
+                )}  
                 <span className="post">
                     <Link className = "link" to = "/upload">
                         Post

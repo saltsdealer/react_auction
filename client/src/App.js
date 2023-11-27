@@ -6,7 +6,7 @@ import Home from "./pages/Home.jsx";
 import Footer from "./components/Footer.jsx";
 import Single from "./pages/Single.jsx";
 import Post from "./pages/Post.jsx";
-import "./style.scss";
+import Chat from "./pages/Chat.jsx";
 import User from "./pages/User.jsx";
 import PostUser from "./pages/PostUser.jsx";
 import Order from "./pages/Order.jsx"
@@ -17,6 +17,7 @@ import AdminHome from "./pages/AdminHome.jsx";
 import DeleteUser from "./pages/DeleteUser.jsx";
 import DeleteProduct from "./pages/DeleteProduct.jsx";
 import Statistics from "./pages/Statistics.jsx";
+import "./style.scss";
 
 
 const Layout = () => {
@@ -68,6 +69,10 @@ const router = createBrowserRouter([
         path:"/order/:id",
         element:<Order/>
       },
+      {
+        path:"/chat",
+        element:<Chat/>
+      },
     ]
   },
   {
@@ -97,6 +102,10 @@ const router = createBrowserRouter([
       {
         path: "product",
         element: <DeleteProduct />,
+      },
+      {
+        path:"/adminchat",
+        element:<Chat/>
       },
       {
         path: "statistics",

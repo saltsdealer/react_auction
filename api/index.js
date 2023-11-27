@@ -5,6 +5,7 @@ import authRoutes from "./routes/auth.js";
 import adminAuthRoutes from "./routes/adminAuth.js";
 import adminRoutes from "./routes/admin.js";
 import orderRoutes from "./routes/orders.js"
+import chatRoute from "./routes/chat.js"
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import multer from "multer";
@@ -39,6 +40,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/auth/admin", adminAuthRoutes);
 app.use("/api/admin", adminRoutes);
+app.use('/api/chat', chatRoute)
 
 app.get("/test", (req, res) => {
   res.json("It works!");
