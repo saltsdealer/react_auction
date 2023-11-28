@@ -6,7 +6,8 @@ import Menu from '../components/Menu'
 import axios from 'axios'
 import moment from 'moment'
 import { AuthContext } from '../context/authContext';
-import Bidding from '../components/Bidding.jsx'
+import Bidding from '../components/Bidding.jsx';
+import Message from '../components/msgBoard.jsx';
 
 const Single = () => {
 
@@ -36,14 +37,14 @@ const Single = () => {
   // change or break this to a use effect just check if it is sold
   const startBidSession = async () => {
     try {
-      const before = await axios.get(`http://34.125.1.254:8800/api/orders/before/${product_id}`);
+      const before = await axios.get(`http://localhost:8800/api/orders/before/${product_id}`);
       if (before.data.status === '1') {
         setStatus('Sold');
         // get the bid session and find all the bids here
         return
       } else {
         //create bid session
-        await axios.post(`http://34.125.1.254:8800/api/orders/`, {
+        await axios.post(`http://localhost:8800/api/orders/`, {
           user_id: currentUser.user_id,
           time: timerDuration,
           productId: product_id
@@ -60,7 +61,7 @@ const Single = () => {
       try {
         console.log("error here 1");
         // 1 for sold 0 for unsold
-        const res1 = await axios.get(`http://34.125.1.254:8800/api/orders/before/${product_id}`);
+        const res1 = await axios.get(`http://localhost:8800/api/orders/before/${product_id}`);
         console.log("status: ", res1.data.status)
         if (res1.data.status === '1') setStatus('Sold');
         // if not initialized to unopened
@@ -76,9 +77,9 @@ const Single = () => {
     const fetchData = async () => {
       console.log("Fetching data for product ID:", product_id);
       try {
-        const res = await axios.get(`http://34.125.1.254:8800/api/products/${product_id}`);
+        const res = await axios.get(`http://localhost:8800/api/products/${product_id}`);
         setProduct(res.data);
-        
+
       } catch (err) {
         console.log("Error fetching data:", err);
       }
@@ -89,7 +90,7 @@ const Single = () => {
 
   const handleDelete = async () => {
     try {
-      await axios.delete(`http://34.125.1.254:8800/api/products/${product_id}`);
+      await axios.delete(`http://localhost:8800/api/products/${product_id}`);
       navigate("/");
     } catch (err) {
       console.log(err);
@@ -105,13 +106,13 @@ const Single = () => {
 
 
   const fetchStatusProcessing = useCallback(async () => {
-    
+
     if (status !== 'Sold' && status !== 'unopened') {
       console.log("reading status", status)
-      
-      const response = await axios.get(`http://34.125.1.254:8800/api/orders/time/${product_id}`);
+
+      const response = await axios.get(`http://localhost:8800/api/orders/time/${product_id}`);
       console.log("reading res:", response.data.endTime);
-      if (!response.data.endTime ){
+      if (!response.data.endTime) {
         setStatus('unopened');
         return;
       }
@@ -119,30 +120,30 @@ const Single = () => {
       const currentTime = new Date();
       if (endTime > currentTime) {
         if (status !== 'Bidding')
-        setStatus('Bidding');
+          setStatus('Bidding');
         return;
       } else if (endTime < currentTime) {
         // time ended
-        const res = await axios.get(`http://34.125.1.254:8800/api/orders/bid_in_session/${product_id}`);
+        const res = await axios.get(`http://localhost:8800/api/orders/bid_in_session/${product_id}`);
         if (res.data.bid_status === '1') {
           setStatus('Sold');
-          await axios.post(`http://34.125.1.254:8800/api/orders/update/${product_id}`);
+          await axios.post(`http://localhost:8800/api/orders/update/${product_id}`);
           return;
-        } else if (res.data.bid_status === '0'){
+        } else if (res.data.bid_status === '0') {
           setStatus('Ended With No biders')
-          await axios.delete(`http://34.125.1.254:8800/api/orders/${product_id}`);
+          await axios.delete(`http://localhost:8800/api/orders/${product_id}`);
         } else {
           console.log('No return value, check backend logic')
         }
+      }
     }
-    }
-  },[status,product_id]);
+  }, [status, product_id]);
 
   useEffect(() => {
     const intervalId = setInterval(() => {
       fetchStatusProcessing();
     }, 1000); // Run every second
-  
+
     // Cleanup function to clear the interval when the component unmounts
     return () => clearInterval(intervalId);
   }, [fetchStatusProcessing]);
@@ -151,7 +152,7 @@ const Single = () => {
   const [countdown, setCountdown] = useState(null);
   const fetchEndTime = useCallback(async () => {
     try {
-      const response = await axios.get(`http://34.125.1.254:8800/api/orders/time/${product_id}`);
+      const response = await axios.get(`http://localhost:8800/api/orders/time/${product_id}`);
       const endTime = new Date(response.data.endTime);
       //console.log("end_time:",endTime);
       return endTime;
@@ -185,7 +186,7 @@ const Single = () => {
             setCountdown(newRemainingTime);
           } else {
             clearInterval(intervalId);
-              // Set the status to 'Ended' here
+            // Set the status to 'Ended' here
           }
         }, 1000);
       }
@@ -194,7 +195,7 @@ const Single = () => {
     initializeCountdown();
 
     return () => clearInterval(intervalId);
-  }, [fetchEndTime,status]);
+  }, [fetchEndTime, status]);
   // Render countdown if it's active
   const renderCountdown = () => {
     if (countdown !== null) {
@@ -257,7 +258,12 @@ const Single = () => {
         {status !== 'unopened' && <Bidding product_id={product?.product_id} indicator={status}
           user_id={currentUser?.user_id} start_price={product?.price} puser={product?.user_id}
           time={timerDuration} />}
+        <div className="message-section">
+          <Message user_id={currentUser?.user_id} product_id = {product?.product_id} type = 'user' username = {currentUser?.username} />
+        </div>
+
       </div>
+
       <Menu cat={product.prod_id} />
       {/* Status Indicator */}
 

@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import axios from 'axios'
-
+import Message from '../components/msgBoard.jsx';
 import { AuthContext } from '../context/authContext';
 
 const Order = () => {
@@ -42,7 +42,7 @@ const Order = () => {
 
     try {
       // Send a POST request to the server endpoint
-      const response = await axios.post(`http://34.125.1.254:8800/api/users/rates`, data);
+      const response = await axios.post(`http://localhost:8800/api/users/rates`, data);
       console.log(response.data); // Handle the response as needed
       alert('Rating published successfully.');
       window.location.reload();
@@ -88,7 +88,7 @@ const Order = () => {
 
     try {
       console.log(orderId, actionType);
-      const response = axios.post('http://34.125.1.254:8800/api/users/update-status', { order_id: orderId, actionType: actionType });
+      const response = axios.post('http://localhost:8800/api/users/update-status', { order_id: orderId, actionType: actionType });
       console.log(response.status);
       if (!response.status) {
         alert(`${actionType} succesfully`)
@@ -106,7 +106,7 @@ const Order = () => {
     const updatePayload = { order_id: orderId, comment: comments, role: role };
 
     // Making an API call with axios to update the comments in the database
-    axios.post(`http://34.125.1.254:8800/api/users/update-comments`, updatePayload)
+    axios.post(`http://localhost:8800/api/users/update-comments`, updatePayload)
       .then(response => {
         console.log('Success:', response.data);
 
@@ -121,8 +121,8 @@ const Order = () => {
     const fetchOrder = async () => {
       try {
         console.log("res");
-        const res = await axios.get(`http://34.125.1.254:8800/api/users/order/${order_id}`);
-        const end_time = await axios.get(`http://34.125.1.254:8800/api/orders/order-end-time/${order_id}`);
+        const res = await axios.get(`http://localhost:8800/api/users/order/${order_id}`);
+        const end_time = await axios.get(`http://localhost:8800/api/orders/order-end-time/${order_id}`);
         
         let date1 = new Date(end_time.data.end_time);
         let date2 = new Date("2037-01-19T03:13:07.000Z");
@@ -130,13 +130,13 @@ const Order = () => {
         setOrder(res.data);
         if (orders[0].buyer_comment !== null && orders[0].buyer_rate !== -1 && orders[0].seller_comment !== null 
           && orders[0].seller_rate !== -1 && date1.getTime() === date2.getTime()) {
-          await axios.post(`http://34.125.1.254:8800/api/orders/complete`, {order_id : order_id})
+          await axios.post(`http://localhost:8800/api/orders/complete`, {order_id : order_id})
           
           console.log("order end time updated")
         }
 
       } catch (err) {
-        console.error(err);
+        
         // Redirect or handle error
       }
     };
@@ -158,7 +158,6 @@ const Order = () => {
     orderStatus = 'Incomplete'; // Assign value to orderStatus
   }
 
-  console.log(orders);
   return (
     <div className="order-web">
       {orders.map((order, index) => (
@@ -228,7 +227,8 @@ const Order = () => {
             </div>
 
             <div><strong>Product:</strong> {order.pname}</div>
-
+            <div>Need help on the order? Contact your Manager here: </div>
+            <Message user_id = {currentUser?.user_id} product_id = {order_id} type = 'admin' />
           </div>
         ) : (
           <div key={index} className="order-message">
@@ -236,6 +236,8 @@ const Order = () => {
           </div>
         )
       ))}
+
+
     </div>
   );
 }

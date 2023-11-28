@@ -1,4 +1,4 @@
-import { dbUser } from "../db.js";
+import { dbUser, db } from "../db.js";
 import jwt from "jsonwebtoken";
 import moment from "moment";
 import bcrypt from "bcryptjs";
@@ -445,4 +445,132 @@ export const activeBidders = async (req, res) => {
     return res.status(200).json(data);
   });
 
+};
+
+export const getMessages = async (req, res) => {
+  try {
+    const productId = req.body.product_id; // Assuming the product ID is passed as a parameter
+    let query;
+
+    if (req.body.type === 'user') {
+      query = "SELECT * FROM message_user mu JOIN user_key uk ON mu.sender_id = uk.user_id WHERE product_id = ?";
+    } else if (req.body.type === 'admin') {
+      query = "SELECT * FROM message_admin WHERE order_id = ?";
+    } else {
+      return res.status(400).send({ error: 'Invalid type parameter' });
+    }
+
+    // Perform the database query
+    db.query(query, [productId], (err, result) => {
+      if (err) {
+        // Handle any database errors
+        console.log(err);
+        return res.status(500).send({ error: err.message });
+      }
+      // Send the result back to the client
+      return res.status(200).json(result);
+    });
+  } catch (error) {
+    // Handle any other errors
+    res.status(500).send({ error: error.message });
+  }
+};
+
+export const postMessages = async (req, res) => {
+  try {
+    const productId = req.body.product_id; // Assuming the product ID is passed as a parameter
+    let query;
+    let values;
+    let admin_id;
+
+    if (req.body.type === 'user') {
+      query = "INSERT INTO message_user (sender_id, message, product_id) VALUES (?, ?, ?)";
+      values = [req.body.sender_id, req.body.msg, productId];
+      db.query(query, values, (err, result) => {
+        if (err) {
+          // Handle any errors during the database operation
+          return res.status(500).send({ error: err.message });
+        }
+        // Send a successful response back
+        res.status(201).send({ message: 'Message posted successfully', messageId: result.insertId });
+      });
+    } else if (req.body.type === 'admin') {
+      // Fetch the manager_id first
+      const managerQuery = "SELECT manager_id FROM `user` WHERE user_id = ?";
+      console.log("sender_id", req.body.sender_id)
+      admin_id = await db.query(managerQuery, [req.body.sender_id], (err, data) => {
+        if (err) {
+          // Handle any database errors
+          console.log(err);
+          return res.status(500).send({ error: err.message });
+        }
+        admin_id = data[0].manager_id;
+        console.log("admin_id", admin_id)
+        if (admin_id.length === 0) {
+          return res.status(404).send({ error: 'Manager not found' });
+        }
+        query = "INSERT INTO message_admin (sender_id, admin_id, message, order_id) VALUES (?, ?, ?, ?)";
+        values = [req.body.sender_id, admin_id, req.body.msg, req.body.order_id];
+        console.log("values:", values);
+        db.query(query, values, (err, result) => {
+          if (err) {
+            // Handle any errors during the database operation
+            return res.status(500).send({ error: err.message });
+          }
+          // Send a successful response back
+          res.status(201).send({ message: 'Message posted successfully', messageId: result.insertId });
+        });
+      });
+
+    } else {
+      return res.status(400).send({ error: 'Invalid type parameter' });
+    }
+    
+    // Perform the database query
+  } catch (error) {
+    // Handle any other errors
+    res.status(500).send({ error: error.message });
+  }
+};
+
+export const getMessagesAdmin = async (req, res) => {
+  try {
+    const admin_id = req.body.admin_id; // Assuming the product ID is passed as a parameter
+    let query;
+      query = "SELECT * FROM message_admin WHERE admin_id = ?";
+    // Perform the database query
+    db.query(query, [admin_id], (err, result) => {
+      if (err) {
+        // Handle any database errors
+        console.log(err);
+        return res.status(500).send({ error: err.message });
+      }
+      // Send the result back to the client
+      return res.status(200).json(result);
+    });
+  } catch (error) {
+    // Handle any other errors
+    res.status(500).send({ error: error.message });
+  }
+};
+
+export const postMessagesAdmin = async (req, res) => {
+  try {
+    let query;
+      query = "INSERT INTO message_admin (sender_id, admin_id, message, order_id) VALUES (?, ?, ?, ?)";
+    // Perform the database query
+    const msg = `Regarding ${req.body.order_id} : ${req.body.msg}`
+    db.query(query, [req.body.sender_id, req.body.admin_id, msg, req.body.order_id], (err, result) => {
+      if (err) {
+        // Handle any database errors
+        console.log(err);
+        return res.status(500).send({ error: err.message });
+      }
+      // Send the result back to the client
+      return res.status(200).json(result);
+    });
+  } catch (error) {
+    // Handle any other errors
+    res.status(500).send({ error: error.message });
+  }
 }

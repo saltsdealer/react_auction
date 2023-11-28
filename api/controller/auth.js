@@ -66,8 +66,8 @@ export const login =(req,res) =>{
       if (data.length==0) return res.status(404).json("User not found!")
       // check pw
       console.log(data);
-      const isPasswordBcrypt = bcrypt.compareSync(req.body.password, data[0].PASSWORD);
-      const isPasswordDB = (req.body.password == data[0].PASSWORD);
+      const isPasswordBcrypt = bcrypt.compareSync(req.body.password, data[0].PASSWORD ? data[0].PASSWORD : data[0].password);
+      const isPasswordDB = (req.body.password == data[0].PASSWORD ? data[0].PASSWORD : data[0].password);
       
       if(!isPasswordBcrypt && !isPasswordDB) return res.status(400).json("wrong username or password");
 

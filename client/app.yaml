@@ -1,0 +1,21 @@
+runtime: nodejs20 # specify the Node.js version compatible with your app
+env: standard      # use the standard environment
+
+instance_class: F1  # choose an instance class based on your needs
+
+automatic_scaling:
+  target_cpu_utilization: 0.6
+  min_instances: 1
+  max_instances: 5
+
+# Handlers define how to respond to HTTP requests
+handlers:
+  # Serve all static files with the url pattern /static
+  - url: /static
+    static_dir: build/static
+
+  # Serve the main index.html for all other requests to enable client-side routing
+  - url: /.*
+    static_files: build/index.html
+    upload: build/index.html
+

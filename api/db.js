@@ -3,19 +3,19 @@ import mysql2 from "mysql2"
 
 
 export const db = mysql.createConnection({
-  host: "127.0.0.1",
+  host: "localhost",
   user: "root",
-  password: "some_pass",
+  password: "000000",
   database: "test_env",
-  port: 3306, // this is only in my testing env
+  port: 3307, // this is only in my testing env
 });
 
 export const dbChat = mysql2.createConnection({
-  host: "127.0.0.1",
+  host: "localhost",
   user: "root",
-  password: "some_pass",
+  password: "000000",
   database: "test_env",
-  port: 3306,
+  port: 3307,
 })
 
 // host:"localhost",
@@ -39,11 +39,11 @@ export const dbChat = mysql2.createConnection({
 // })
 
 export const dbUser = mysql2.createConnection({
-  host: "127.0.0.1",
+  host: "localhost",
   user: "root",
-  password: "some_pass",
+  password: "000000",
   database: "test_env",
-  port: 3306, // this is only in my testing env
+  port: 3307, // this is only in my testing env
 });
 
 export const dbSchema = `

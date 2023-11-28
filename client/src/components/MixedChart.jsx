@@ -47,7 +47,7 @@ export const MixedChart = (props) => {
   useEffect(() => {
     axios
       .get(
-        `http://34.125.1.254:8800/api/admin/data/${props.category}/${props.year}`
+        `http://localhost:8800/api/admin/data/${props.category}/${props.year}`
       )
       .then((response) => {
         const data = response.data; // Use response.data to access the JSON data
