@@ -16,8 +16,25 @@ const Post = () => {
   const [file, setFile] = useState(null);
   const [cat, setCat] = useState(state?.cat || "");
   const { currentUser } = useContext(AuthContext);
+  const [isValid, setIsValid] = useState(true);
+  const USStateCodes = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 
+                      'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 
+                      'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 
+                      'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI', 'SC', 
+                      'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'];
 
   const navigate = useNavigate()
+
+  const validateStateCode = (code) => {
+    if (USStateCodes.includes(code.toUpperCase())) {
+        console.log("Valid State Code");
+        setIsValid(true);
+    } else {
+        console.log("Invalid State Code");
+        setIsValid(false);
+        setSCode(''); // Reset the input field
+    }
+}
   const allFieldsFilled = value && title && price && weight && address_id && file && cat;
   if (!currentUser) return <div>login to post items</div>;
 
@@ -25,7 +42,7 @@ const Post = () => {
     try {
       const formData = new FormData();
       formData.append("file", file);
-      const res = await axios.post("http://localhost:8800/api/upload", formData);
+      const res = await axios.post("/upload", formData);
       return res.data;
     } catch (err) {
       console.log(err);
@@ -38,7 +55,7 @@ const Post = () => {
 
     try {
       state
-        ? await axios.put(`http://localhost:8800/api/products/${state.id}`, {
+        ? await axios.put(`/products/${state.id}`, {
           title,
           desc: value,
           cat,
@@ -47,7 +64,7 @@ const Post = () => {
           weight,
           address_id,
         })
-        : await axios.post(`http://localhost:8800/api/products/`, {
+        : await axios.post(`/products/`, {
           title,
           desc: value,
           cat,
@@ -62,7 +79,10 @@ const Post = () => {
       console.log(err);
     }
   };
-
+  const handleInputChange = (e) => {
+    setSCode(e.target.value);
+    validateStateCode(e.target.value);
+}
   return (
     <div className="add">
       <div className="content">
@@ -84,8 +104,10 @@ const Post = () => {
         <input
           type="text"
           placeholder="State code"
-          onChange={(e) => setSCode(e.target.value)}
+          onChange={handleInputChange}
         />
+          {!isValid && <p>Please enter a valid state code.</p>}
+
         <div className="editorContainer">
           <ReactQuill
             className="editor"

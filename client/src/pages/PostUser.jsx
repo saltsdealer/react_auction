@@ -28,7 +28,7 @@ const PostUser = () => {
     const handleClick = async (e) => {
         
         try {
-            await axios.put(`http://localhost:8800/api/users/${state.user_id}`, {
+            await axios.put(`/users/${state.user_id}`, {
                 nname,
                 uname,
                 add,

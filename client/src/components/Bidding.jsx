@@ -16,7 +16,7 @@ const Bidding = ({ product_id, indicator, user_id, start_price, puser, time, onB
 
   const fetchBids = useCallback(async () => {
     try {
-      const res = await axios.get(`http://localhost:8800/api/orders/bids/${product_id}`);
+      const res = await axios.get(`/orders/bids/${product_id}`);
       setBids(res.data); // Update the state with the fetched bids
     } catch (err) {
       console.error('Error fetching bids:', err);
@@ -56,7 +56,7 @@ const Bidding = ({ product_id, indicator, user_id, start_price, puser, time, onB
       if (Number(bidAmount) > highestBid) {
         // Handle successful bid logic
         setBidStatusMessage("Bid successful!");
-        await axios.post(`http://localhost:8800/api/orders/add`, {
+        await axios.post(`/orders/add`, {
           bidder_id: user_id,
           product_id: product_id,
           bidprice: bidAmount
@@ -79,7 +79,7 @@ const Bidding = ({ product_id, indicator, user_id, start_price, puser, time, onB
       }
       
       // First GET request to check if order exists
-      const res = await axios.get(`http://localhost:8800/api/orders/order/${product_id}`);
+      const res = await axios.get(`/orders/order/${product_id}`);
       console.log('Order status:', res.data.order_status);
   
       // Proceed only if there is no existing order
@@ -89,11 +89,11 @@ const Bidding = ({ product_id, indicator, user_id, start_price, puser, time, onB
         console.log('Highest bid:', highestBid);
   
         // Get seller ID
-        const sellerResponse = await axios.get(`http://localhost:8800/api/users/userByProduct/${product_id}`);
+        const sellerResponse = await axios.get(`/users/userByProduct/${product_id}`);
         console.log('Seller ID:', sellerResponse.data.user_id);
   
         // POST request to create a new order
-        const orderResponse = await axios.post(`http://localhost:8800/api/orders/create`, {
+        const orderResponse = await axios.post(`/orders/create`, {
           price: highestBid.price,
           buyer_id: highestBid.user_id,
           bid_session_id: highestBid.bid_session_id,
@@ -103,6 +103,8 @@ const Bidding = ({ product_id, indicator, user_id, start_price, puser, time, onB
         // Handle the response from order creation
         console.log('Order created:', orderResponse.data);
         // Return or handle the response as needed
+      } else {
+        return 
       }
     } catch (err) {
       console.error('Error in checkOrder:', err);

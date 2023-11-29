@@ -168,16 +168,30 @@ export const getEndTime = async (req, res) => {
 
 export const createOrder = async (req, res) => {
     try {
-    
         const order_id = `${req.body.buyer_id}_${moment().format("YYYYMMDDHHmmss")}`;
+        const check = `SELECT * FROM order_creation WHERE order_id = ?`;
         const insert = `
             INSERT INTO order_creation (order_id, bid_session_id, final_price, buyer_id, seller_id) 
             VALUES (?, ?, ?, ?, ?)
         `;
 
-        await db.query(insert, [order_id, req.body.bid_session_id, req.body.price, req.body.buyer_id, req.body.seller_id]);
+        // First, check if the order already exists
+        await db.query(check, [order_id], (err, data)=>{
+            if (data[0]) {
+                return res.status(409)
+            } else {
+                try {
+                    db.query(insert, [order_id, req.body.bid_session_id, req.body.price, req.body.buyer_id, req.body.seller_id]);
+                    return res.status(201).send('Order created successfully.');
+                } catch (err) {
+                    console.error("Error in creating order:", err);
+                    return res.status(500).json({ error: "Internal Server Error" });
+                }
+            }
+        });
 
-        res.status(201).send('Order created successfully.');
+        // If the order does not exist, insert it
+        
     } catch (error) {
         console.error('Error creating order:', error);
         res.status(500).send('Error creating order.');

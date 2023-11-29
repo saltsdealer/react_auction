@@ -1,7 +1,7 @@
 import mysql from "mysql";
 import mysql2 from "mysql2"
 
-
+// temp setting will change to gcp in demo
 export const db = mysql.createConnection({
   host: "localhost",
   user: "root",

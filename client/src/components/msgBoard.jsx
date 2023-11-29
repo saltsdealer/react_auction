@@ -22,12 +22,12 @@ const Message = ({ user_id, type, product_id, username }) => {
           return;
         }
         if (type === 'toUser') {
-          const res = await axios.post(`http://localhost:8800/api/admin/adminmsg`, { admin_id: user_id })
+          const res = await axios.post(`/admin/adminmsg`, { admin_id: user_id })
           console.log(res);
           setMessages(res.data)
           return;
         }
-        const response = await axios.post(`http://localhost:8800/api/admin/messages`, { type: type, product_id: product_id }); // Replace with your API endpoint
+        const response = await axios.post(`/admin/messages`, { type: type, product_id: product_id }); // Replace with your API endpoint
         const data = response.data;
         setMessages(data);
       } catch (error) {
@@ -50,21 +50,21 @@ const Message = ({ user_id, type, product_id, username }) => {
     try {
       // Send a POST request to the server
       if (type === 'user') {
-        const response = await axios.post(`http://localhost:8800/api/admin/postmsg`, {
+        const response = await axios.post(`/admin/postmsg`, {
           type: type,
           sender_id: user_id,
           msg: value,
           product_id: product_id
         });
       } else if (type === 'admin') {
-        const response = await axios.post(`http://localhost:8800/api/admin/postmsg`, {
+        const response = await axios.post(`/admin/postmsg`, {
           type: type,
           sender_id: user_id,
           msg: value,
           order_id: product_id
         });
       } else if (type === 'toUser') {
-        const response = await axios.post(`http://localhost:8800/api/admin/postadmin`, {
+        const response = await axios.post(`/admin/postadmin`, {
           admin_id: user_id,
           sender_id: userId,
           order_id: order_id,

@@ -32,7 +32,7 @@ const handleSearch = async (event) => {
   };
   console.log(searchParams);
   try {
-    const res = await axios.post(`http://localhost:8800/api/products/search`, searchParams);
+    const res = await axios.post(`/products/search`, searchParams);
     setSearched(res.data);
     console.log("res:", res.data);
   } catch (error) {
@@ -44,7 +44,7 @@ const handleSearch = async (event) => {
 useEffect(()=>{
   const fetchData = async ()=>{
     try {
-      const res = await axios.get(`http://localhost:8800/api/products${cat}`);
+      const res = await axios.get(`/products${cat}`);
       setProduct_homes(res.data);
     } catch(err){
       console.log(err);
@@ -56,7 +56,7 @@ useEffect(()=>{
 useEffect(() => {
   const fetchData = async () => {
     try {
-      const response = await axios.post('http://localhost:8800/api/products/bidding');
+      const response = await axios.post('/products/bidding');
       if (response && response.data) {
         console.log("status", response.data);
         setStatus(response.data);
@@ -108,11 +108,10 @@ const checkBiddingStatus = (products, productId) => {
   // Check if the product is found and the end_time is set
   if (product && product.end_time) {
     const endTime = new Date(product.end_time);
-    const specialTime = new Date('2037-01-19T03:13:07Z');
     const now = new Date();
-
+    let stringValue = String(product.end_time);
     // Check if end_time is later than now and not equal to specialTime
-    if (endTime > now && endTime.getTime() !== specialTime.getTime()) {
+    if (endTime > now && !stringValue.startsWith('2037')) {
       return 'bidding';
     }
   }
