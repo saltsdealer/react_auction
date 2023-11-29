@@ -1,5 +1,6 @@
 -- 8.x mysql
 -- user adding products and perhaps all the isnerting model
+-- this is only part of the sqls, for the whole picture, check the orginal codes
 SET @userId = '123456789';
 SET @price = 100.00;
 SET @weight = 5.00;
@@ -13,6 +14,7 @@ EXECUTE stmt USING @userId, @price, @weight, @description, @prodId, @addressId;
 DEALLOCATE PREPARE stmt;
 
 -- Counting the number of products in each category: for now each category has one product
+-- this is used in admin home page
 SELECT 
     pc.category_name,
     COUNT(p.product_id) AS number_of_products,
@@ -26,8 +28,31 @@ GROUP BY
 ORDER BY 
     combined_price DESC;
 
--- Finding the maximum or minimum sold product price in each category: angain, only 7 sold so seven data, with toys has max price at 120.5
+--quartely retrive data: 
+SELECT
+        YEAR(months.month_start) AS year,
+        MONTH(months.month_start) AS month,
+        COUNT(DISTINCT user_id) AS val
+      FROM
+        (SELECT 
+            CONCAT(YEAR(create_time), '-', LPAD(MONTH(create_time), 2, '0'), '-01') AS month_start,
+            LAST_DAY(create_time) AS month_end
+        FROM 
+            User
+        Where YEAR(create_time) = ?
+        GROUP BY 
+            month_start, month_end) AS months
+      JOIN 
+        User ON (create_time <= months.month_end AND (end_time IS NULL OR end_time > months.month_start))
+      GROUP BY
+        year,
+        month
+      ORDER BY
+        year,
+        month;
 
+-- Finding the maximum or minimum sold product price in each category: angain, only 7 sold so seven data, with toys has max price at 120.5
+-- this was not used in actuall setting
 SELECT 
     pc.id AS category_id,
     pc.category_name,
@@ -45,6 +70,7 @@ GROUP BY
 
 
 -- Finding the total sales for each manager’s users: as 0005 would have most sells
+-- this is used in admin home page
 SELECT 
     u.manager_id,
     SUM(oc.final_price) AS total_sales
@@ -58,6 +84,7 @@ ORDER BY
     total_sales DESC;
     
 --  order ending cycle (time consumed from creating bidding session to order ending) as testing data are setting to current time stamp, so above 20 days
+-- this is not used 
 SELECT 
     o.order_id,
     bs.bid_session_id,
@@ -70,6 +97,7 @@ JOIN
     BidSession bs ON oc.bid_session_id = bs.bid_session_id;
 
 -- active bidders, more then one bids in 7 days 012345679 3bids, 124567890 2 bids 789012345 2bids
+-- this is used in admin home page
 SELECT 
     user_id,
     bid_count
@@ -98,6 +126,7 @@ WHERE
     bid_count > 1;
 
 -- Finding the states that bought highest amount of products. 1 Pennsylvania
+-- this is not used 
 SELECT 
     a.state_name,
     sub.total_amount
@@ -118,6 +147,7 @@ ORDER BY
 LIMIT 1;
 
 -- top 3 states 1 pennsylvania 2 washington 3 Illinois
+-- this is not used 
 WITH RankedStates AS (
     SELECT 
         a.state_name,

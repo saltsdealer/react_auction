@@ -16,6 +16,9 @@ DROP FUNCTION IF EXISTS GetHighestBidForSession;
 DROP FUNCTION IF EXISTS RandomNumberLetter;
 
 -- all tables
+DROP TABLE IF EXISTS order_comments;
+DROP TABLE IF EXISTS message_user;
+DROP TABLE IF EXISTS message_admin;
 DROP TABLE IF EXISTS shipping;
 DROP TABLE IF EXISTS payment;
 DROP TABLE IF EXISTS `order`;

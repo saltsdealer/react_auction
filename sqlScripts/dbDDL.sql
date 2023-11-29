@@ -186,6 +186,21 @@ CREATE TABLE admin_key (
     PRIMARY KEY (admin_id)
 );
 
+CREATE TABLE message_user (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id VARCHAR(255),
+    message TEXT,
+    product_id VARCHAR(255) 
+);
+
+CREATE TABLE message_admin (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    sender_id VARCHAR(255),
+    admin_id VARCHAR(255),
+    message TEXT,
+    order_id VARCHAR(255) 
+);
+
 DELIMITER //
 CREATE TRIGGER after_manager_insert
 AFTER INSERT ON Manager
