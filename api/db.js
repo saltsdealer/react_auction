@@ -7,7 +7,7 @@ export const db = mysql.createConnection({
   user: "root",
   password: "000000",
   database: "test_env",
-  port: 3307, // this is only in my testing env
+  port: 3306, // this is only in my testing env
 });
 
 export const dbChat = mysql2.createConnection({
@@ -15,14 +15,14 @@ export const dbChat = mysql2.createConnection({
   user: "root",
   password: "000000",
   database: "test_env",
-  port: 3307,
+  port: 3306,
 })
 
 // host:"localhost",
 // user:"root",
 // password:"0000",
 // database:"test_env",
-// port: 3307
+// port: 3306
 // db.connect(error => {
 //     if (error) {
 //       console.error('Error connecting to the database:', error);
@@ -35,7 +35,7 @@ export const dbChat = mysql2.createConnection({
 //     user:"root",
 //     password:"000000",
 //     database: "test_env",
-//     port: 3307 // this is only in my testing env
+//     port: 3306 // this is only in my testing env
 // })
 
 export const dbUser = mysql2.createConnection({
@@ -43,7 +43,7 @@ export const dbUser = mysql2.createConnection({
   user: "root",
   password: "000000",
   database: "test_env",
-  port: 3307, // this is only in my testing env
+  port: 3306, // this is only in my testing env
 });
 
 export const dbSchema = `

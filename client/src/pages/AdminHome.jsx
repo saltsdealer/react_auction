@@ -16,7 +16,7 @@ const AdminHome = () => {
     useEffect(() => {
         const fetchSells = () => {
             try {
-                axios.get(`/admin/sells`).then(response => {
+                axios.get(`http://34.125.1.254:8800/api/admin/sells`).then(response => {
                     // The data you want is in response.data
                     console.log(response.data); // This will log the data part to the console
                     // You can now use this data as needed in your application
@@ -35,7 +35,7 @@ const AdminHome = () => {
     useEffect(() => {
         const fetchCats = () => {
             try {
-                axios.get(`/admin/home/bycat`).then(response => {
+                axios.get(`http://34.125.1.254:8800/api/admin/home/bycat`).then(response => {
 
                     setCats(response.data);
                 });
@@ -63,7 +63,7 @@ const AdminHome = () => {
             setType(t);
 
             try {
-                await axios.get(`/admin/${currentUser.admin_id}/${t}`).then(response => {
+                await axios.get(`http://34.125.1.254:8800/api/admin/${currentUser.admin_id}/${t}`).then(response => {
 
                     setManaged(response.data);
                 });
@@ -81,7 +81,7 @@ const AdminHome = () => {
 
 
             try {
-                axios.get(`/admin/bidders`).then(response => {
+                axios.get(`http://34.125.1.254:8800/api/admin/bidders`).then(response => {
 
                     setBidders(response.data);
 

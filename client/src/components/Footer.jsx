@@ -8,7 +8,7 @@ const Footer = () => {
   const { currentUser } = useContext(AuthContext);
   const getChatbotLink = () => {
     if (currentUser && !currentUser.user_id && currentUser.admin_id) {
-      return '/adminchat'; // Link to a special admin chat, for example
+      return '/admin/chat'; // Link to a special admin chat, for example
     } else {
       return '/chat'; // Default link to the regular chatbot
     }

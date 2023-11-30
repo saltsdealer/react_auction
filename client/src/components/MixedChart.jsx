@@ -1,23 +1,30 @@
 import React, { useState, useEffect } from "react";
-import { Line } from "react-chartjs-2";
+import { Line, Bar } from "react-chartjs-2";
 import axios from "axios";
 import {
-  Chart,
+  Chart as ChartJS,
+  BarController,
   CategoryScale,
-  LineElement,
-  PointElement,
   LinearScale,
+  PointElement,
+  LineElement,
   BarElement,
-} from "chart.js";
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
 
-Chart.register(
+ChartJS.register(
+  BarController,
   CategoryScale,
-  LineElement,
-  PointElement,
   LinearScale,
-  BarElement
+  PointElement,
+  LineElement,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
 );
-
 export const MixedChart = (props) => {
   console.log("props", props);
   const [chartData, setChartData] = useState({
@@ -46,8 +53,7 @@ export const MixedChart = (props) => {
 
   useEffect(() => {
     axios
-      .get(
-        `/admin/data/${props.category}/${props.year}`
+      .get( `http://34.125.1.254:8800/api/admin/data/${props.category}/${props.year}`
       )
       .then((response) => {
         const data = response.data; // Use response.data to access the JSON data

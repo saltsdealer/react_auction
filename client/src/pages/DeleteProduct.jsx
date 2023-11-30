@@ -25,7 +25,7 @@ const DeleteProduct = () => {
 
   const handleClick = async (e) => {
     try {
-      await axios.delete(`/admin/product`, {
+      await axios.delete(`http://34.125.1.254:8800/api/admin/product`, {
         data: inputs,
       });
       setReturnMedssage("Successfully deleted!");

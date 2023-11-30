@@ -96,7 +96,7 @@ const router = createBrowserRouter([
         element: <DeleteUser />,
       },
       {
-        path: "/admin/home",
+        path: "home",
         element: <AdminHome />,
       },
       {
@@ -104,8 +104,8 @@ const router = createBrowserRouter([
         element: <DeleteProduct />,
       },
       {
-        path:"/adminchat",
-        element:<Chat/>
+        path:"chat",
+        element:<Chat />
       },
       {
         path: "statistics",

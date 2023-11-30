@@ -24,7 +24,7 @@ const Chat = () => {
         setError(null)
        
         try {
-            const response = await fetch('/chat', {
+            const response = await fetch('http://34.125.1.254:8800/api/chat', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

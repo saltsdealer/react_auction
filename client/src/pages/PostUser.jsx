@@ -14,7 +14,7 @@ const PostUser = () => {
     const [address, setAdd] = useState(state?.address_detail || "");
     const [pw, setPW] = useState();
     const [email, setEmail] = useState(state?.email || "");
-    const {currentUser,logout} = useContext(AuthContext);
+    const { currentUser, logout } = useContext(AuthContext);
 
     const navigate = useNavigate()
 
@@ -22,13 +22,13 @@ const PostUser = () => {
         handleClick();
         logout();
         navigate("/");
-      };
-      
+    };
+
 
     const handleClick = async (e) => {
-        
+
         try {
-            await axios.put(`/users/${state.user_id}`, {
+            await axios.put(`http://34.125.1.254:8800/api/users/${state.user_id}`, {
                 nname,
                 uname,
                 add,
@@ -44,14 +44,16 @@ const PostUser = () => {
         }
     };
 
+    const allFieldsFilled = nname && uname && add && address && pw && email;
+
     return (
         <div className="add">
             <div className="content">
                 <input
                     type="text"
-                    placeholder= {nname}
+                    placeholder={nname}
                     onChange={(e) => setUname(e.target.value)}
-                    
+
                 />
                 <input
                     type="text"
@@ -82,9 +84,11 @@ const PostUser = () => {
             <div className="menu">
                 <div className="item">
 
-                    <div className="buttons">
-                        <button onClick={combinedFunction}>Logout and Upload</button>
-                    </div>
+                    {allFieldsFilled && (
+                        <div className="buttons">
+                            <button onClick={combinedFunction}>Logout and Upload</button>
+                        </div>
+                    )}
                 </div>
 
             </div>
