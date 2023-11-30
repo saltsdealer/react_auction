@@ -156,7 +156,7 @@ export const addProduct = async (req, res) => {
       req.body.title,
     ];
 
-    const imgUrl = `../upload/${req.body.picture}`;
+    const imgUrl = `http://34.125.1.254/upload/${req.body.picture}`;
     const values_pic = [product_id, imgUrl];
 
     // Inserting into prod_pic table

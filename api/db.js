@@ -1,7 +1,8 @@
 import mysql from "mysql";
 import mysql2 from "mysql2"
 
-// temp setting will change to gcp in demo
+// API endpoints is running in GCE VM instance, so it can use localhost 
+// change to your setting accordingly
 export const db = mysql.createConnection({
   host: "localhost",
   user: "root",
