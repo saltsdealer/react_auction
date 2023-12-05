@@ -196,8 +196,8 @@ INSERT INTO `Product`
 ('prod202310271300002004', '567890123', 5.99, 0.2, '2023-10-01 13:00:00', '2023-10-03 10:20:00', 'Organic Apple Juice', 'FOD', 'IL',"juice"),
 ('prod202310271400002005', '678901234', 1299.99, 20.0, '2023-10-27 14:00:00', '2023-10-04 16:30:00', 'Leather Sofa Set', 'FRN', 'GA',"sofa"),
 ('prod202310271500002006', '789012345', 59.99, 2.0, '2023-10-27 15:00:00', '2023-10-05 16:30:00', 'Nike Tennis Racket', 'SPT', 'WA',"racket"),
-('prod202310271600002007', '890123456', 24.99, 0.4, '2023-10-27 16:00:00', '2037-01-19 03:13:07', 'Remote Control Car', 'TOY', 'CO',"toy car"),
-('prod202310271700002008', '901234568', 14.99, 0.1, '2023-10-27 17:00:00', '2037-01-19 03:13:07', 'Organic Face Cream', 'HLH', 'AZ',"face cream"),
+('prod202310271600002007', '890123456', 24.99, 0.4, '2023-10-27 16:00:00', '2023-10-19 03:13:07', 'Remote Control Car', 'TOY', 'CO',"toy car"),
+('prod202310271700002008', '901234568', 14.99, 0.1, '2023-10-27 17:00:00', '2023-10-21 03:13:07', 'Organic Face Cream', 'HLH', 'AZ',"face cream"),
 ('prod202310271800002009', '012345679', 9999.99, 0.05, '2023-10-27 18:00:00', '2037-01-19 03:13:07', 'Diamond Necklace', 'JWL', 'PA',"necklace");
 INSERT INTO `Product` (product_id, user_id, price, weight, create_time, end_time, description, prod_id, address_id, pname) VALUES
 ('prod202310271800002010','012345679',50,10,'2023-10-27 18:00:00','2037-01-19 03:13:07','90% used, but still very nice coat','APP','CA','Burberry Wind Coat');
