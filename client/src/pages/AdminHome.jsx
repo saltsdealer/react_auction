@@ -13,6 +13,8 @@ const AdminHome = () => {
     const [sells, setSells] = useState();
     const [currentTime, setCurrentTime] = useState(moment().format('dddd, MMMM Do YYYY, HH:mm:ss'));
     const [bidders, setBidders] = useState();
+    const [total, currentTotal] = useState([]);
+
     useEffect(() => {
         const fetchSells = () => {
             try {
@@ -103,8 +105,28 @@ const AdminHome = () => {
         return () => clearInterval(intervalId); // Clear interval on component unmount
     }, []);
 
+    useEffect(() => {
+        const fetchSales = () => {
+
+
+            try {
+                const res = axios.get(`http://34.125.1.254:8800/api/admin/total`)
+                currentTotal(res.data);
+                console.log(res.data)
+             
+
+            } catch (err) {
+                // Handle error
+            }
+        };
+
+        fetchSales();
+    }, [])
+
     if (!currentUser) return <div>Confidential content login to access</div>; 
     
+
+
     return (
         <>
             <div>Welcome! Manager {currentUser.admin_name} </div>

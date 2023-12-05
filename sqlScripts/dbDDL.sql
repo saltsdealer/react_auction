@@ -331,10 +331,9 @@ END //
 
 DELIMITER ;
 
-CREATE VIEW ProductsNotSold AS 
-SELECT * 
-FROM Product 
-WHERE end_time = '2037-01-19 03:13:07';
+CREATE VIEW ProductsSoldTotal AS 
+SELECT sum(final_price) 
+FROM order_creation oc;
 
 CREATE OR REPLACE VIEW order_view AS
 SELECT 
@@ -353,11 +352,13 @@ LEFT JOIN
 LEFT JOIN 
     shipping s ON o.order_id = s.order_id;
     
-CREATE VIEW UsersWithBids AS 
+CREATE VIEW UsersWithoutBids AS 
 SELECT DISTINCT 
     u.user_id,
     u.user_name
 FROM 
     `User` u
-JOIN 
-    `Bids` b ON u.user_id = b.user_id;
+LEFT JOIN 
+    `Bids` b ON u.user_id = b.user_id
+WHERE 
+    b.user_id IS NULL;

@@ -574,3 +574,16 @@ export const postMessagesAdmin = async (req, res) => {
     res.status(500).send({ error: error.message });
   }
 }
+
+export const totalSales = async (req, res) => {
+  const q = 'SELECT * FROM ProductsSoldTotal';
+  db.query(q, [], (err, result) => {
+    if (err) {
+      // Handle any database errors
+      console.log(err);
+      return res.status(500).send({ error: err.message });
+    }
+    // Send the result back to the client
+    return res.status(200).json(result);
+  });
+}
