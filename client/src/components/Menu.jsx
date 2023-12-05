@@ -21,7 +21,7 @@ const Menu = ({cat}) => {
     const fetchData = async ()=>{
     try {
       const res = await axios.get(`http://34.125.1.254:8800/api/products/?cat=${cat}`);
-      
+      setProduct_homes(res.data);
       console.log(res.data);
     } catch(err){
       console.log(err);
