@@ -264,7 +264,7 @@ The webs is build on GCE, VM instances :
 
    
 
-2. Check apache server status, it should start when you activate the instance
+2. Check apache server status, it should start when you activate the instance and make sure your frontend is build using yarn or npm and sent the files to /var/www/html apache server path.
 
    ```
    systemctl status apache2
