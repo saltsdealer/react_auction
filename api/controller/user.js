@@ -150,18 +150,14 @@ export const updateUser = async (req, res) => {
     }
 
     const q_user_key = "UPDATE user_key SET `username`=?, `password`=?, `email`=? WHERE `user_id`=?;";
-    const q_user_nokey = "UPDATE user_key SET `username`=?, `email`=? WHERE `user_id`=?;";
     const q_user = "UPDATE `user` SET `user_name`=?, `add_id`=?, `address_detail`=? WHERE `user_id`=?;";
 
-    const values_user = [req.body.uname, req.body.add, req.body.address, userId];
-    const values_keys = [req.body.nname, hashedPassword, req.body.email, userId];
-    const values_nokeys = [req.body.nname, req.body.email, userId];
+  
+    const values_key = [req.body.nname,hashedPassword,req.body.email,userId]
+    const values = [req.body.uname,req.body.add, req.body.address, userId]
 
-    const query = updatePassword ? q_user_key : q_user_nokey;
-    const values = updatePassword ? values_keys : values_nokeys;
-
-    await db.query(query, values);
-    await db.query(q_user, values_user);
+    await db.query(q_user, values);
+    await db.query(q_user_key, values_key);
 
     res.json({ message: "User has been updated." });
   } catch (err) {

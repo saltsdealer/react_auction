@@ -18,7 +18,7 @@ const Single = () => {
   const product_id = location.pathname.split("/")[2];
   const [status, setStatus] = useState('');
   const { currentUser } = useContext(AuthContext);
-
+  
 
   const openBidding = async () => {
     setStatus('Bidding'); // Open bidding immediately

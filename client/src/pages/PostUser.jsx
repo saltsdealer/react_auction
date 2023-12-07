@@ -8,14 +8,14 @@ import { AuthContext } from '../context/authContext.js'
 
 const PostUser = () => {
     const state = useLocation().state;
-    const [nname, setNname] = useState(state?.nickname || "");
-    const [uname, setUname] = useState(state?.user_name || "");
-    const [add, setSCode] = useState(state?.add_id || "");
-    const [address, setAdd] = useState(state?.address_detail || "");
+    const [nname, setNname] = useState("");
+    const [uname, setUname] = useState( "");
+    const [add, setSCode] = useState("");
+    const [address, setAdd] = useState("");
     const [pw, setPW] = useState();
-    const [email, setEmail] = useState(state?.email || "");
+    const [email, setEmail] = useState("");
     const { currentUser, logout } = useContext(AuthContext);
-
+    const user_id = state.user_id;
     const navigate = useNavigate()
 
     const combinedFunction = () => {
@@ -28,14 +28,15 @@ const PostUser = () => {
     const handleClick = async (e) => {
 
         try {
-            await axios.put(`http://34.125.1.254:8800/api/users/${state.user_id}`, {
+            await axios.put(`http://34.125.1.254:8800/api/users/${user_id}`, {
                 nname,
                 uname,
                 add,
                 address,
                 pw,
-                email,
-                pw
+                email
+            }, {
+                withCredentials: true
             })
 
             //navigate("/")
@@ -43,16 +44,17 @@ const PostUser = () => {
             console.log(err);
         }
     };
+  
 
     const allFieldsFilled = nname && uname && add && address && pw && email;
-
+    console.log(nname, uname)
     return (
         <div className="add">
             <div className="content">
                 <input
                     type="text"
-                    placeholder={nname}
-                    onChange={(e) => setUname(e.target.value)}
+                    placeholder="new username"
+                    onChange={(e) => setNname(e.target.value)}
 
                 />
                 <input
@@ -62,22 +64,22 @@ const PostUser = () => {
                 />
                 <input
                     type="text"
-                    placeholder={uname}
-                    onChange={(e) => setNname(e.target.value)}
+                    placeholder="modify your name"
+                    onChange={(e) => setUname(e.target.value)}
                 />
                 <input
                     type="text"
-                    placeholder={address}
+                    placeholder="new address"
                     onChange={(e) => setAdd(e.target.value)}
                 />
                 <input
                     type="text"
-                    placeholder={add}
+                    placeholder="state code"
                     onChange={(e) => setSCode(e.target.value)}
                 />
                 <input
                     type="text"
-                    placeholder={email}
+                    placeholder="new email"
                     onChange={(e) => setEmail(e.target.value)}
                 />
             </div>
@@ -93,7 +95,7 @@ const PostUser = () => {
 
             </div>
         </div>
-
+    
     );
 };
 

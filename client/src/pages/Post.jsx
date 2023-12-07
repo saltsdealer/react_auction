@@ -17,6 +17,9 @@ const Post = () => {
   const [cat, setCat] = useState(state?.cat || "");
   const { currentUser } = useContext(AuthContext);
   const [isValid, setIsValid] = useState(true);
+  
+;
+
   const USStateCodes = ['AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'FL', 'GA', 
                       'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME', 'MD', 
                       'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH', 'NJ', 
@@ -52,10 +55,13 @@ const Post = () => {
   const handleClick = async (e) => {
     e.preventDefault();
     const imgUrl = await upload();
-
+    let product_id
+    if (state) {
+      product_id = state.product_id
+    }
     try {
       state
-        ? await axios.put(`http://34.125.1.254:8800/api/products/${state.id}`, {
+        ? await axios.put(`http://34.125.1.254:8800/api/products/${product_id}`, {
           title,
           desc: value,
           cat,
@@ -82,7 +88,8 @@ const Post = () => {
   const handleInputChange = (e) => {
     setSCode(e.target.value);
     validateStateCode(e.target.value);
-}
+  }
+
   return (
     <div className="add">
       <div className="content">
@@ -261,48 +268,5 @@ const Post = () => {
   );
 };
 
-//   return (
-//     <div className='add'>
-//       <div className='content'>
-//         <input type='text' placeholder='Title' onChange = {e=>setTitle(e.target.value)}/>
-//         <input type='text' placeholder='Price' />
-//         <input type='text' placeholder='Address:state' />
-//         <input type='text' placeholder='Address' />
-//         <div className="editorContainer">
-//           <ReactQuill className='editor' theme='snow' value={value} onChange={setValue} />  
-//         </div>
-//       </div>
-//       <div className='menu'>
-//         <div className='item'>
-//           <h1>Publish</h1>
-//           <input style = {{display:"none"}}type='file' name='' id='file' onChange={e=>setFile(e.target.files[0])}/>
-//           <label className = "file" htmlFor="file">Upload Image</label>
-//             <div className='buttons'>
-//               <button>Save as a draft</button>
-//               <button>Update</button>
-//             </div>
-//         </div>
-//         <div className='item'>
-//           <h1>Category</h1>
-//           <select value={category} onChange={(e) => setCategory(e.target.value)}>
-//             <option value="">Select Category</option>
-//             <option value="Electronics">Electronics</option>
-//             <option value="Appliances">Appliances</option>
-//             <option value="Books">Books</option>
-//             <option value="Apparel">Apparel</option>
-//             <option value="Food">Food</option>
-//             <option value="Furniture">Furniture</option>
-//             <option value="Sports Equipment">Sports Equipment</option>
-//             <option value="Health & Beauty">Health & Beauty</option>
-//             <option value="Toys">Toys</option>
-//             <option value="Jewelry">Jewelry</option>
-
-//           </select>
-
-//         </div>
-//       </div>
-//     </div>
-//   )
-// }
 
 export default Post;

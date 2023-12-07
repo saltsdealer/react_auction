@@ -14,7 +14,7 @@ const User = () => {
   const [user, setUser] = useState({});
   const [buy, setBuy] = useState({});
   const navigate = useNavigate();
-  const { currentUser } = useContext(AuthContext);
+  const { currentUser , logout } = useContext(AuthContext);
   const username = location.pathname.split("/")[2];
   const [buyorder, setbuyOrder] = useState({});
   const [sellorder, setSellOrder] = useState({});
@@ -124,6 +124,7 @@ const User = () => {
   const handleDelete = async () => {
     try {
       await axios.delete(`http://34.125.1.254:8800/api/users/${userDetails.user_id}`);
+      logout();
       navigate("/");
     } catch (err) {
       console.log(err);

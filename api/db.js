@@ -4,17 +4,17 @@ import mysql2 from "mysql2"
 // API endpoints is running in GCE VM instance, so it can use localhost 
 // change to your setting accordingly
 export const db = mysql.createConnection({
-  host: "localhost",
+  host: "34.125.1.254",
   user: "root",
-  password: "000000",
+  password: "some_pass",
   database: "test_env",
   port: 3306, // this is only in my testing env
 });
 
 export const dbChat = mysql2.createConnection({
-  host: "localhost",
+  host: "34.125.1.254",
   user: "root",
-  password: "000000",
+  password: "some_pass",
   database: "test_env",
   port: 3306,
 })
@@ -40,9 +40,9 @@ export const dbChat = mysql2.createConnection({
 // })
 
 export const dbUser = mysql2.createConnection({
-  host: "localhost",
+  host: "34.125.1.254",
   user: "root",
-  password: "000000",
+  password: "some_pass",
   database: "test_env",
   port: 3306, // this is only in my testing env
 });

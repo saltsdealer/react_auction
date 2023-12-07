@@ -228,7 +228,7 @@ const token = req.cookies.access_token;
 
     const postId = req.params.id;
     const q =
-      "UPDATE product SET `panme`=?,`price` = ?, `weight` = ?, `description`=?,`cat`=? WHERE `product_id` = ? AND `user_id` = ?";
+      "UPDATE product SET `pname`=?,`price` = ?, `weight` = ?, `description`=?,`prod_id`=? WHERE `product_id` = ? AND `user_id` = ?";
 
     const values = [req.body.title, req.body.price, req.body.weight, req.body.desc, req.body.cat];
 
